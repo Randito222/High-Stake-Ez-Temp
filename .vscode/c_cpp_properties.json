@@ -1,0 +1,32 @@
+{
+  "configurations": [
+    {
+      "name": "PROS Project",
+      "includePath": [
+        "${workspaceFolder}/**",
+        "c:\\Users\\randy\\OneDrive\\Documents\\PID Test\\include",
+        "c:\\Users\\randy\\OneDrive\\Programs\\PID Test\\include",
+        "c:\\Users\\randy\\OneDrive\\Programs\\Week\\Week 1\\PID Test\\include",
+        "c:\\Users\\randy\\OneDrive\\Programs\\Week\\week 6\\PID Test\\include",
+        "c:\\Users\\randy\\OneDrive\\Programs\\Week\\week7\\PID Test\\include"
+      ],
+      "defines": [
+        "_DEBUG",
+        "UNICODE",
+        "_UNICODE"
+      ],
+      "compilerPath": "c:\\Users\\randy\\AppData\\Roaming\\Code\\User\\globalStorage\\sigbots.pros\\install\\pros-toolchain-windows\\usr\\bin\\arm-none-eabi-g++",
+      "cStandard": "gnu11",
+      "cppStandard": "gnu++20",
+      "intelliSenseMode": "gcc-arm",
+      "browse": {
+        "path": [
+          "c:\\Users\\randy\\OneDrive\\Programs\\Week\\week7\\PID Test"
+        ],
+        "limitSymbolsToIncludedHeaders": true,
+        "databaseFilename": ""
+      }
+    }
+  ],
+  "version": 4
+}
