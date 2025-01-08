@@ -136,7 +136,7 @@ void autonomous() {
  */
 void opcontrol() { // Driver Control
   // This is preference to what you like to drive on
-  pros::motor_brake_mode_e_t driver_preference_brake = MOTOR_BRAKE_COAST;
+  pros::motor_brake_mode_e_t driver_preference_brake = /*MOTOR_BRAKE_COAST;*/ MOTOR_BRAKE_HOLD;
   //AutonAutoClamp.suspend();
   NOJAM.suspend();
   // Blue_Mode.suspend();
