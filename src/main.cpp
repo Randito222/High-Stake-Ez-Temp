@@ -2,6 +2,7 @@
 #include "EZ-Template/auton.hpp"
 #include "EZ-Template/util.hpp"
 #include "autons.hpp"
+#include "okapi/api/chassis/controller/chassisController.hpp"
 #include "pros/misc.h"
 #include "pros/motors.h"
 #include "pros/rtos.hpp"
@@ -21,6 +22,8 @@ ez::Drive chassis(
     16,      // IMU Port
     3.25,  // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!)
     450);   // Wheel RPM
+
+
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -55,19 +58,17 @@ void initialize() {
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
       //Auton("Swing Example\n\nSwing in an 'S' curve", swing_example),
-      // Auton("Blue Negative AWP\n\nDoes a AWP in blue negative side.", Blue_Negative_AWP),
-      // Auton("Blue Positive AWP\n\nDoes a AWP in blue positive side.", Blue_Positive_AWP),
-      //Auton("Red Negative AWP\n\nDoes a AWP in red negative side.", Red_Negative_AWP),
-      //Auton("Red Positive AWP\n\nDoes a AWP in red positive side.", Red_Positive_AWP),
-      // Auton("Blue Single Goal\n\n Gets one goal and fills it up.", Blue_Single_Goal),
-      //Auton("Red Single Goal\n\n Gets one goal and fills it up.", Red_Single_Goal),
-      // Auton("Blue Rush \n\ngoes for middle goal.", Blue_Rush),
-      //Auton("Red Rush \n\ngoes for middle goal.", Red_Rush),
-      Auton("Sig Negative Red\n\n scores on alliance stake and scores 4 more on the neg goal.",SigAutoRN),
-      Auton("Sig Negative Blue\n\n scores on alliance stake and scores 4 more on the neg goal.",SigAutoBN),
-      Auton("Sig Positive Red\n\n scores on alliance stake and scores 2 more on the pos goal.",SigAutoRP),
-      Auton("Sig Positive Blue\n\n scores on alliance stake and scores 2 more on the pos goal.",SigAutoBP),
-      Auton("Sig AWP \n\n Scores on alliance stake, two more on neg goal, 1 more on pos goal", SigAWPR),
+      Auton("Blue Negative AWP\n\nDoes a AWP in blue negative side.", Blue_Negative_AWP),
+      Auton("Blue Positive AWP\n\nDoes a AWP in blue positive side.", Blue_Positive_AWP),
+      Auton("Red Negative AWP\n\nDoes a AWP in red negative side.", Red_Negative_AWP),
+      Auton("Red Positive AWP\n\nDoes a AWP in red positive side.", Red_Positive_AWP),
+      Auton("Blue Single Goal\n\n Gets one goal and fills it up.", Blue_Single_Goal),
+      Auton("Red Single Goal\n\n Gets one goal and fills it up.", Red_Single_Goal),
+      // Auton("Sig Negative Red\n\n scores on alliance stake and scores 4 more on the neg goal.",SigAutoRN),
+      // Auton("Sig Negative Blue\n\n scores on alliance stake and scores 4 more on the neg goal.",SigAutoBN),
+      // Auton("Sig Positive Red\n\n scores on alliance stake and scores 2 more on the pos goal.",SigAutoRP),
+      // Auton("Sig Positive Blue\n\n scores on alliance stake and scores 2 more on the pos goal.",SigAutoBP),
+      // Auton("Sig AWP \n\n Scores on alliance stake, two more on neg goal, 1 more on pos goal", SigAWPR),
       Auton("Elim Auto \n\n Gets thrid goal and puts on ring on it.", GoalRush),
       Auton("Skills", SkillsV2),
   });
@@ -112,6 +113,11 @@ void competition_initialize() {
  * from where it left off.
  */
 void autonomous() {
+  //  profileController->generatePath(
+  //   {{0_ft, 0_ft, 0_deg}, {3_ft, 0_ft, 0_deg}}, "A");
+  // profileController->setTarget("A");
+  // profileController->waitUntilSettled();
+  
   chassis.pid_targets_reset();                // Resets PID targets to 0
   chassis.drive_imu_reset();                  // Reset gyro position to 0
   chassis.drive_sensor_reset();               // Reset drive sensors to 0
@@ -135,6 +141,7 @@ void autonomous() {
  * task, not resume it from where it left off.
  */
 void opcontrol() { // Driver Control
+
   // This is preference to what you like to drive on
   pros::motor_brake_mode_e_t driver_preference_brake = /*MOTOR_BRAKE_COAST;*/ MOTOR_BRAKE_HOLD;
   //AutonAutoClamp.suspend();
@@ -158,10 +165,12 @@ void opcontrol() { // Driver Control
       }
       if(master.get_digital(DIGITAL_R2)){ // When holding button R2 
        Intakefirst.move(127);
+       IntakeSecond.move(127);
        //Test = 1;
       }
       else if(master.get_digital(DIGITAL_R1)){ // When holding button R1
         Intakefirst.move(-127); // Spin Inakte first motor to 127 voltages (forwards)
+        IntakeSecond.move(-127);
       }
       else if(master.get_digital(DIGITAL_DOWN)){ // When holding button down
         Arm_Out();
@@ -172,13 +181,14 @@ void opcontrol() { // Driver Control
       }
       else if(master.get_digital(DIGITAL_L2)){
         Intakefirst.move(127);
-        if( RingStop.get_distance() < 225){
-         // pros::delay(5);
-          Intakefirst.move(0);
-        }
+        // if( RingStop.get_distance() < 225){
+        //  // pros::delay(5);
+        //   Intakefirst.move(0);
+        // }
        }
       else{
         Intakefirst.move(0);
+        IntakeSecond.move(0);
         Test = 0;
         Intake_P.set_value(0);
       } 

@@ -57,6 +57,9 @@ void swing_example() {
 
   chassis.pid_swing_set(ez::LEFT_SWING, 0_deg, SWING_SPEED, 45);
   chassis.pid_wait();
+
+  myChassis->moveDistance(40_in);
+  
 }
 
 ///
@@ -471,149 +474,7 @@ void Red_Single_Goal(){
 
 }
 
-void Blue_Rush(){
-  chassis.pid_turn_set(-45,TURN_SPEED); // Turns to left til robot faces -45 degrees to push ring away
-  chassis.pid_wait_quick_chain(); // waits till robot turns to -43 degree to quickly go to the next line of code
 
-  chassis.pid_turn_set(10,TURN_SPEED); // Turns to the right till robot faces 10 degrees to face towards middle goal
-  chassis.pid_wait(); // waits till the robot turns to 10 degrees
-
-  IntakeToggle(); // activates intake in case of rings in the way
-
-  chassis.pid_drive_set(38,DRIVE_SPEED,true); // Goes forward 38 inches
-  chassis.pid_wait_until(28); // When robot reaches to 28 inches
-  IntakeToggle(); // Disables intake
-  chassis.pid_speed_max_set(60); // Reduce the speed from 127 (DRIVE_SPEED) to 60
-  chassis.pid_wait(); // Waits till the robot has traveled 38 inches
-
-  chassis.pid_turn_set(-190,60); // Turns to the left till robot faces -190 degrees to bring goal back
-  chassis.pid_wait(); // Waits for the robot has turns to -190 degrees
-
-  chassis.pid_drive_set(17,DRIVE_SPEED);
-  chassis.pid_wait();
-
-  pros::delay(200);
-
-  chassis.pid_drive_set(-5,DRIVE_SPEED);
-  chassis.pid_wait_quick_chain();
-
-  chassis.pid_turn_set(10,TURN_SPEED);
-  chassis.pid_wait_quick_chain();
-
-  chassis.pid_drive_set(-6,60);
-  chassis.pid_wait();
-
-  chassis.pid_turn_set(170,TURN_SPEED); // Turns to the right till robot faces 190 degrees to face preload
-  chassis.pid_wait();
-
-  chassis.pid_drive_set(20,80);
-  chassis.pid_wait_quick_chain();
-
-  chassis.pid_turn_set(80,TURN_SPEED);
-  chassis.pid_wait();
-
-  IntakePistonToggle();
-
-  chassis.pid_drive_set(32,DRIVE_SPEED,true);
-  chassis.pid_wait_until(20);
-  chassis.pid_speed_max_set(60);
-  chassis.pid_wait();
-
-  IntakePistonToggle();
-
-  chassis.pid_drive_set(-10,60);
-  chassis.pid_wait();
-
- // AutoClamp.notify();
-  IntakeToggle();
-
-  chassis.pid_turn_set(90,TURN_SPEED);
-  chassis.pid_wait_quick_chain();
-
-  chassis.pid_drive_set(-28,DRIVE_SPEED);
-  chassis.pid_wait_until(-15);
-  chassis.pid_speed_max_set(60);
-  chassis.pid_wait_quick_chain();
-
-  chassis.pid_turn_set(100,TURN_SPEED);
-  chassis.pid_wait();
-
-  chassis.pid_drive_set(24,60);
-  chassis.pid_wait();
-
-}
-
-void Red_Rush(){
-  chassis.pid_turn_set(45,TURN_SPEED); // Turns to left til robot faces 45 degrees to push ring away
-  chassis.pid_wait_quick_chain(); // waits till robot turns to 43 degree to quickly go to the next line of code
-
-  chassis.pid_turn_set(-10,TURN_SPEED); // Turns to the right till robot faces 10 degrees to face towards middle goal
-  chassis.pid_wait(); // waits till the robot turns to -10 degrees
-
-  IntakeToggle(); // activates intake in case of rings in the way
-
-  chassis.pid_drive_set(38,DRIVE_SPEED,true); // Goes forward 38 inches
-  chassis.pid_wait_until(28); // When robot reaches to 28 inches
-  IntakeToggle(); // Disables intake
-  chassis.pid_speed_max_set(60); // Reduce the speed from 127 (DRIVE_SPEED) to 60
-  chassis.pid_wait(); // Waits till the robot has traveled 38 inches
-
-  chassis.pid_turn_set(190,60); // Turns to the left till robot faces 190 degrees to bring goal back
-  chassis.pid_wait(); // Waits for the robot has turns to 190 degrees
-
-  chassis.pid_drive_set(17,DRIVE_SPEED);
-  chassis.pid_wait();
-
-  pros::delay(200);
-
-  chassis.pid_drive_set(-5,DRIVE_SPEED);
-  chassis.pid_wait_quick_chain();
-
-  chassis.pid_turn_set(-10,TURN_SPEED);
-  chassis.pid_wait_quick_chain();
-
-  chassis.pid_drive_set(-6,60);
-  chassis.pid_wait();
-
-  chassis.pid_turn_set(-170,TURN_SPEED); // Turns to the right till robot faces 190 degrees to face preload
-  chassis.pid_wait();
-
-  chassis.pid_drive_set(20,80);
-  chassis.pid_wait_quick_chain();
-
-  chassis.pid_turn_set(-80,TURN_SPEED);
-  chassis.pid_wait();
-
-  IntakePistonToggle();
-
-  chassis.pid_drive_set(32,DRIVE_SPEED,true);
-  chassis.pid_wait_until(20);
-  chassis.pid_speed_max_set(60);
-  chassis.pid_wait();
-
-  IntakePistonToggle();
-
-  chassis.pid_drive_set(-10,60);
-  chassis.pid_wait();
-
-  //AutoClamp.notify();
-  IntakeToggle();
-
-  chassis.pid_turn_set(-90,TURN_SPEED);
-  chassis.pid_wait_quick_chain();
-
-  chassis.pid_drive_set(-28,DRIVE_SPEED);
-  chassis.pid_wait_until(-15);
-  chassis.pid_speed_max_set(60);
-  chassis.pid_wait_quick_chain();
-
-  chassis.pid_turn_set(-100,TURN_SPEED);
-  chassis.pid_wait();
-
-  chassis.pid_drive_set(24,60);
-  chassis.pid_wait();
-
-}
 
 void SigAutoRN(){
  NOJAM.resume();

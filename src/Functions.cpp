@@ -3,6 +3,7 @@
 #include "EZ-Template/util.hpp"
 #include "autons.hpp"
 #include "main.h"
+#include "okapi/api/util/mathUtil.hpp"
 #include "pros/colors.h"
 #include "pros/colors.hpp"
 #include "pros/device.hpp"
@@ -19,7 +20,7 @@
 //                                //
 
 const double pi = 3.14159265359; // The value for PI
-const double Wheel_circumference = 3 * pi; // Wheel size * PI
+const double Wheel_circumference = 3 * okapi::pi; // Wheel size * PI
 const double Track_Width = 10.25; // Width from left wheel to right wheel
 const double Wheel_base = 10; // From far edge of front wheel to far edge of back wheel
 const double CIRCUMDIAMETER = sqrt(pow(Track_Width, 2) + pow(Wheel_base, 2)); 
@@ -540,40 +541,40 @@ bool pistonState = false; // Track piston state for toggling
 //           controller button presses, and the AutoClampBool mode.
 void ClampOut() {
   
-  //  while (true) {
-  //       // Read the current states of limit switches and the controller button
-  //       bool limit1Pressed = LimitSwitch1.get_value(); // Check if LimitSwitch1 is pressed
-  //       bool limit2Pressed = LimitSwitch2.get_value(); // Check if LimitSwitch2 is pressed
-  //       bool buttonBPressed = master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B); // Check if Button B is pressed
+   while (true) {
+        // Read the current states of limit switches and the controller button
+        // bool DistanceLow = Distance_S.get_distance() < 120; // Check if LimitSwitch1 is pressed
+        // // bool limit2Pressed = LimitSwitch2.get_value(); // Check if LimitSwitch2 is pressed
+        bool buttonBPressed = master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B); // Check if Button B is pressed
 
-  //       if (LineTrack.get_value() < 2870 && LineTrack.get_value() > 2850) {
-  //           // If both limit switches are pressed, activate the clamp
-  //           Clamp.set_value(true); // Extend the piston
-  //           pistonState = true;   // Update the piston state as active
+        if (Distance_S.get_distance() < 120) {
+            // If both limit switches are pressed, activate the clamp
+            Clamp.set_value(true); // Extend the piston
+            pistonState = true;   // Update the piston state as active
 
-  //           if (buttonBPressed) {
-  //             // If Button B is pressed while both switches are active, deactivate the piston
-  //             Clamp.set_value(false); // Retract the piston
-  //             pistonState = false;    // Update the piston state as inactive
-  //             pros::delay(500);       // Short delay to prevent rapid state changes
-  //           }
-  //       } else if (buttonBPressed) {
-  //           // If Button B is pressed
-  //           if (!(LineTrack.get_value() < 2870 && LineTrack.get_value() > 2850)) {
-  //               // If neither limit switch is pressed, toggle the piston state
-  //               pistonState = !pistonState; // Toggle the piston state
-  //               Clamp.set_value(pistonState); // Set the piston based on the new state
-  //               pros::delay(500);       // Short delay to prevent rapid state changes
-  //           } else if (LineTrack.get_value() < 2870 && LineTrack.get_value() > 2850) {
-  //               // If either limit switch is pressed, deactivate the piston
-  //               Clamp.set_value(false); // Retract the piston
-  //               pistonState = false;    // Update the piston state as inactive
-  //           }
-  //       }
+            if (buttonBPressed) {
+              // If Button B is pressed while both switches are active, deactivate the piston
+              Clamp.set_value(false); // Retract the piston
+              pistonState = false;    // Update the piston state as inactive
+              pros::delay(800);       // Short delay to prevent rapid state changes
+            }
+        } else if (buttonBPressed) {
+            // If Button B is pressed
+            if (!(Distance_S.get_distance() < 120)) {
+                // If neither limit switch is pressed, toggle the piston state
+                pistonState = !pistonState; // Toggle the piston state
+                Clamp.set_value(pistonState); // Set the piston based on the new state
+                pros::delay(500);       // Short delay to prevent rapid state changes
+            } else if (Distance_S.get_distance() < 120) {
+                // If either limit switch is pressed, deactivate the piston
+                Clamp.set_value(false); // Retract the piston
+                pistonState = false;    // Update the piston state as inactive
+            }
+        }
 
-  //       // Add a short delay to prevent excessive looping and CPU usage
-  //       pros::delay(20);
-  //   }
+        // Add a short delay to prevent excessive looping and CPU usage
+        pros::delay(20);
+    }
 }
 
 

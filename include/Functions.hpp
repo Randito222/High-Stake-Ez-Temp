@@ -1,5 +1,9 @@
 //PID Settings
+#include "okapi/api.hpp"
 #include "pros/rtos.hpp"
+
+using namespace okapi;
+
 extern double inchesToTicks(double inches); 
 extern double ticksToInches(double ticks);
 extern double timer();
@@ -61,10 +65,28 @@ inline bool Mode = false;
 
 //inline pros::Task Red_Mode(RedColorSensor_Task); // Creates a task to detect Red
 //inline pros::Task Blue_Mode(BlueColorSensor_task); // Creates a task to detect Blue
-//inline pros::Task AutoClamp(ClampOut); // Creates a task for auto clamp
+inline pros::Task AutoClamp(ClampOut); // Creates a task for auto clamp
 //inline pros::Task AutonAutoClamp(AutonClampOut); // Creates a task for auton auto clamp
 inline pros::Task NOJAM(Anti_Jam); // Creates a task for intake
 //inline pros::Task ColorSide(Blue_v_Red);
+
+
+inline std::shared_ptr<ChassisController> myChassis =
+  ChassisControllerBuilder()
+    .withMotors({1, 2}, {-3, -4})
+    // Green gearset, 4 in wheel diam, 11.5 in wheel track
+    .withDimensions(AbstractMotor::gearset::green, {{4_in, 11.5_in}, imev5GreenTPR})
+    .build();
+
+inline std::shared_ptr<AsyncMotionProfileController> profileController = 
+  AsyncMotionProfileControllerBuilder()
+    .withLimits({
+      1.0, // Maximum linear velocity of the Chassis in m/s
+      2.0, // Maximum linear acceleration of the Chassis in m/s/s
+      10.0 // Maximum linear jerk of the Chassis in m/s/s/s
+    })
+    .withOutput(myChassis)
+    .buildMotionProfileController();
 
 
 

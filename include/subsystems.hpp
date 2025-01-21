@@ -18,7 +18,7 @@ inline pros::Motor Right_Front(13);
 inline pros::Motor Right_Middle(17);
 inline pros::Motor Right_Back(19);
 inline pros::Motor Intakefirst(-15);   
-inline pros::Motor IntakeSecond(2);
+inline pros::Motor IntakeSecond(10);
 inline pros::Motor Arm(12);
 
 
@@ -34,9 +34,9 @@ inline pros::adi::DigitalOut RightDoinker('F',false);
 // Sensors
 
 inline pros::IMU gyro(12);
-inline pros::Optical OP(14);
+inline pros::Optical OP(1);
 //inline pros::adi::DigitalIn LimitSwitch1 ('G');
 inline pros::adi::DigitalIn LimitSwitch2 ('E');
 inline pros::ADIAnalogIn LineTrack('A');
 inline pros::ADIAnalogIn RingStopper('G');
-inline pros::Distance RingStop(1);
+inline pros::Distance Distance_S(14);
