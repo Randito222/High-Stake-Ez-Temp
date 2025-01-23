@@ -476,19 +476,24 @@ void RedColorSensor_Task(){
 
             // Check if the hue corresponds to red (typical red hue is around 0-30 degrees)
       if (hue >= 100) {
-          // Turn off the intake for a bit
-          pros::delay(100);
-          Intakefirst.move(0);
+          // Reverses intake for a bit
+          pros::delay(120); // Delays for 120 ms
+          Intakefirst.move(-127); // Reverses inatke
+          IntakeSecond.move(-127); // Reverses intake 
           pros::delay(250); // Delay for 300 ms
-          // Resume normal intake operation
-          Intakefirst.move(127);
       }
       else if(hue <= 90){
         Intakefirst.move(127);
+        IntakeSecond.move(127);
       }
+    }
+    else if (Test ==2){
+      Intakefirst.move(-127); // Spin Inakte first motor to 127 voltages (forwards)
+      IntakeSecond.move(-127);
     }
     else{
       Intakefirst.move(0);
+      IntakeSecond.move(0);
     }
        
 
@@ -510,19 +515,24 @@ void BlueColorSensor_task(){
 
             // Check if the hue corresponds to red (typical red hue is around 0-30 degrees)
       if (hue <= 20) {
-          // Turn off the intake for a bit
-          pros::delay(100);
-          Intakefirst.move(0);
+          // Reverses intake for a bit
+          pros::delay(120); // Delays for 120 ms
+          Intakefirst.move(-127); // Reverses inatke
+          IntakeSecond.move(-127); // Reverses intake 
           pros::delay(250); // Delay for 300 ms
-          // Resume normal intake operation
-          Intakefirst.move(127);
       }
       else if(hue >= 30){
         Intakefirst.move(127);
+        IntakeSecond.move(127);
       }
+    }
+    else if (Test ==2){
+      Intakefirst.move(-127); // Spin Inakte first motor to 127 voltages (forwards)
+      IntakeSecond.move(-127);
     }
     else{
       Intakefirst.move(0);
+      IntakeSecond.move(0);
     }
        
 
@@ -547,7 +557,7 @@ void ClampOut() {
         // // bool limit2Pressed = LimitSwitch2.get_value(); // Check if LimitSwitch2 is pressed
         bool buttonBPressed = master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B); // Check if Button B is pressed
 
-        if (Distance_S.get_distance() < 120) {
+        if (Distance_S.get_distance() < 130) {
             // If both limit switches are pressed, activate the clamp
             Clamp.set_value(true); // Extend the piston
             pistonState = true;   // Update the piston state as active
@@ -560,12 +570,12 @@ void ClampOut() {
             }
         } else if (buttonBPressed) {
             // If Button B is pressed
-            if (!(Distance_S.get_distance() < 120)) {
+            if (Distance_S.get_distance() > 80) {
                 // If neither limit switch is pressed, toggle the piston state
                 pistonState = !pistonState; // Toggle the piston state
                 Clamp.set_value(pistonState); // Set the piston based on the new state
                 pros::delay(500);       // Short delay to prevent rapid state changes
-            } else if (Distance_S.get_distance() < 120) {
+            } else if (Distance_S.get_distance() < 80) {
                 // If either limit switch is pressed, deactivate the piston
                 Clamp.set_value(false); // Retract the piston
                 pistonState = false;    // Update the piston state as inactive

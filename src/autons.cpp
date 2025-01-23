@@ -89,8 +89,7 @@ void tug(int attempts) {
 // Make your own autonomous functions here!
 // . . .
 
-void Blue_Negative_AWP(){
-  chassis.pid_drive_set(-10,70); // goes backwards 8 inches to allign with alliance
+void Blue_Negative_AWP(){chassis.pid_drive_set(-10,70); // goes backwards 8 inches to allign with alliance
                                                // wall stake and to move rings out of the way
   chassis.pid_wait(); // waits for the robot to travel 8 inches
 
@@ -141,6 +140,7 @@ void Blue_Negative_AWP(){
 
   chassis.pid_drive_set(40,60); // Goes foward 40 inches to touch the ladder
   chassis.pid_wait(); // Waits for the robot to travel 40 inches
+  
 
 }
 void Blue_Positive_AWP(){

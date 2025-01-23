@@ -164,31 +164,27 @@ void opcontrol() { // Driver Control
         chassis.drive_brake_set(driver_preference_brake); // Set brakes to drivers preference
       }
       if(master.get_digital(DIGITAL_R2)){ // When holding button R2 
-       Intakefirst.move(127);
-       IntakeSecond.move(127);
-       //Test = 1;
+      //  Intakefirst.move(127);
+      //  IntakeSecond.move(127);
+       Test = 1;
       }
       else if(master.get_digital(DIGITAL_R1)){ // When holding button R1
-        Intakefirst.move(-127); // Spin Inakte first motor to 127 voltages (forwards)
-        IntakeSecond.move(-127);
+        Test = 2;
       }
       else if(master.get_digital(DIGITAL_DOWN)){ // When holding button down
-        Arm_Out();
-       if(Arm.get_position() < -300){
         Intake_P.set_value(1); // Brings the intake up
-       }
-
       }
-      else if(master.get_digital(DIGITAL_L2)){
-        Intakefirst.move(127);
-        // if( RingStop.get_distance() < 225){
-        //  // pros::delay(5);
-        //   Intakefirst.move(0);
-        // }
-       }
+
+      // else if(master.get_digital(DIGITAL_L2)){
+      //   Intakefirst.move(127);
+      //   // if( RingStop.get_distance() < 225){
+      //   //  // pros::delay(5);
+      //   //   Intakefirst.move(0);
+      //   // }
+      //  }
       else{
-        Intakefirst.move(0);
-        IntakeSecond.move(0);
+      //   Intakefirst.move(0);
+      //   IntakeSecond.move(0);
         Test = 0;
         Intake_P.set_value(0);
       } 
