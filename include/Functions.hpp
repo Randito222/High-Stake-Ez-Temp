@@ -27,6 +27,7 @@ extern void Movingcommand(int time, int speed);
 // Intake controls
 extern void IntakeToggle();
 extern void IntakeReverseToggle();
+extern void IntakeControls();
 
 // Clamp controls
 inline int ClampV = -1;
@@ -45,6 +46,7 @@ extern void LeftDoinker_Toggle();
 // Arm Controls
 extern void Arm_Set_Toggle();
 extern void Arm_Out();
+inline int ArmV=0;
 extern void Arm_Toggle();
 
 
@@ -65,9 +67,10 @@ inline bool Mode = false;
 
 inline pros::Task Red_Mode(RedColorSensor_Task); // Creates a task to detect Red
 //inline pros::Task Blue_Mode(BlueColorSensor_task); // Creates a task to detect Blue
-inline pros::Task AutoClamp(ClampOut); // Creates a task for auto clamp
-//inline pros::Task AutonAutoClamp(AutonClampOut); // Creates a task for auton auto clamp
+//inline pros::Task AutoClamp(ClampOut); // Creates a task for auto clamp
+inline pros::Task AutonAutoClamp(AutonClampOut); // Creates a task for auton auto clamp
 inline pros::Task NOJAM(Anti_Jam); // Creates a task for intake
+inline pros::Task IntakeC(IntakeControls); // Creates a task for intake when no color sorter
 //inline pros::Task ColorSide(Blue_v_Red);
 
 

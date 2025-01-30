@@ -474,207 +474,182 @@ void Red_Single_Goal(){
 
 }
 
-
-
 void SigAutoRN(){
- NOJAM.resume();
-//  Blue_Mode.remove();
- //Red_Mode.resume();
+ //NOJAM.resume(); // Resumes the anti jam task
+ //AutoClamp.suspend(); // Suspends the autonomous clamp task
+ //AutonAutoClamp.resume(); // Resumes the autonomous clamp task
+ 
+ Arm.move(127); // Uses the wall stake mech to put ring on the alliance stake
+ pros::delay(550); // Waits 0.55 second to ensure ring is on the stake
+ Arm.move(0); // Stops the wall stake mech
 
- chassis.pid_drive_set(5,50); // Goes forward 8 inches to get closer to alliance stake
- chassis.pid_wait_quick_chain(); // Waits for the robot to travel 6 inches to exit quickly
-                                 //then goes to the next line of code
-
- Arm.move(-60); // Uses the fish mech to put ring on the alliance stake
- pros::delay(600); // Waits 0.6 second to ensure ring is on the stake
- Arm.move(0); // Stops the fish mech
-
- chassis.pid_drive_set(-5,50); // Goes backwards 10 inches to get a bette angle to
+ chassis.pid_drive_set(-4,50); // Goes backwards -4 inches to get a bette angle to
                                              // Intake ring stack
- chassis.pid_wait_quick_chain(); // Waits for the robot to move -8 inches to exit quickly
+ chassis.pid_wait_quick_chain(); // Waits for the robot to move -2 inches to exit quickly
                                  //then goes to the next line of code
 
- chassis.pid_turn_set(-45,TURN_SPEED); // Turns to the left 45 degrees to face the
+ Arm.move_absolute(0,127); // Brings back the arm
+
+ chassis.pid_turn_set(-50,TURN_SPEED); // Turns to the right 50 degrees to face the
                                                      // ring stack
- chassis.pid_wait_quick_chain(); // Waits for the robot to turn -43 degree to exit quickly
+ chassis.pid_wait_quick_chain(); // Waits for the robot to turn 48 degree to exit quickly
                                  //then goes to the next line of code
+
+ Test=3; // Spins the first stage motor to intake the ring
 
  IntakePistonToggle(); // Intake goes up to intake top ring
- IntakeToggle(); // Intake starts spinning to intake ring
- pros::delay(200); // waits 0.2 seconds to ensure intake is up and spinning
+ pros::delay(250); // waits 0.25 seconds to ensure intake is up and spinning
 
- chassis.pid_drive_set(6,DRIVE_SPEED); // Goes forward 5 inches to intake top ring
- chassis.pid_wait_quick_chain(); // Waits for the robot to travel 4 inches to exit quickly
+ chassis.pid_drive_set(13,DRIVE_SPEED); // Goes forward 13 inches to intake top ring
+ chassis.pid_wait_quick_chain(); // Waits for the robot to travel 11 inches to exit quickly
                                  //then goes to the next line of code
 
  IntakePistonToggle(); // Intake goes down to drag ring when it backs up
- pros::delay(300); // waits 0.6 seconds to ensure intake is down
+ pros::delay(250); // waits 0.25 seconds to ensure intake is down
  
- 
- chassis.pid_drive_set(-6,40); // Goes backwards 6 inches to get off the ring stack
- chassis.pid_wait_quick_chain(); // Waits for the robot to travel -4 inches to exit quickly
+ chassis.pid_drive_set(-5,40); // Goes backwards 5 inches to get off the ring stack
+ chassis.pid_wait_quick_chain(); // Waits for the robot to travel -3 inches to exit quickly
                                  //then goes to the next line of code
 
- IntakeToggle(); // Intake stops spinning to keep ring in intake
-
- chassis.pid_turn_set(28,TURN_SPEED); // Turns to the right 73 degrees to make the back face the goal
- chassis.pid_wait_quick_chain(); // Waits for the robot to turn 26 degrees to exit quickly
+ chassis.pid_turn_set(40,TURN_SPEED); // Turns to the left 88 degrees to make the back face the goal
+ chassis.pid_wait_quick_chain(); // Waits for the robot to turn -36 degrees to exit quickly
                                  //then goes to the next line of code
 
- chassis.pid_drive_set(-27,DRIVE_SPEED); // Goes backwards 27 inches to grab the goal
- chassis.pid_wait_until(-15); // When the robot has traveled -15 inches
- chassis.pid_speed_max_set(40); // Slow down the robot speed to 50
- chassis.pid_wait_quick_chain(); // Waits for the robot to travel -25 inches to exit quickly
+ chassis.pid_drive_set(-32,DRIVE_SPEED); // Goes backwards 32 inches to grab the goal
+ chassis.pid_wait_until(-16); // When the robot has traveled -18 inches
+ chassis.pid_speed_max_set(35); // Slow down the robot speed to 40
+ chassis.pid_wait_quick_chain(); // Waits for the robot to travel -30 inches to exit quickly
                                  //then goes to the next line of code
-
  ClampToggle(); // Clamp piston extends to grab goal
- pros::delay(250); // waits 0.3 seconds to ensure goal is secured
+ pros::delay(300); // Waits 0.3 seconds to ensure the goal is in the clamp
 
- IntakeToggle(); // Intake starts spinning to intake ring onto goal
+ Test=1; // Intake starts spinning to intake ring onto goal
 
- chassis.pid_turn_set(160,TURN_SPEED); // Turns to the right 153 degrees to face ladder
- chassis.pid_wait(); // Waits for the robot to turn to -69 degrees
+ chassis.pid_turn_set(184,TURN_SPEED); // Turns to the left 237 degrees to face ladder
+ chassis.pid_wait(); // Waits for the robot to turn to -184 degrees
 
- chassis.pid_drive_set(15,90); // Goes forward 23 inches to grab ring from the center
- chassis.pid_wait(); // Waits for the robot to travel 23 inches
- pros::delay(300);
+ chassis.pid_drive_set(16,90); // Goes forward 15 inches to grab ring from the center
+ chassis.pid_wait(); // Waits for the robot to travel 13 inches
+ pros::delay(300); // Waits 0.3 seconds to ensure the ring gets on the goal
 
- chassis.pid_drive_set(-14,40); // Goes backwards 19 inches to get line up for 
-                                                       // the single ring stack
- chassis.pid_wait(); // Waits for the robot to travel -19 inches  
+ chassis.pid_turn_set(162,TURN_SPEED); // Turns to the right 38 degrees to face the second 
+                                                      // middle ring stack 
+ chassis.pid_wait(); // Waits for the robot to turn to -156 degrees  
 
- chassis.pid_turn_set(116,TURN_SPEED); // Turns to the right 50 degrees to face the single ring stack 
- chassis.pid_wait(); // Waits for the robot to turn to 128 degrees  
-
- chassis.pid_drive_set(24,80); // Goes forward 20 inches to intake the ring
- chassis.pid_wait(); // Waits for the robot to travel 20 inches 
+ chassis.pid_drive_set(12,80); // Goes forward 12 inches to intake the ring
+ chassis.pid_wait(); // Waits for the robot to travel 12 inches 
  pros::delay(400);
 
- chassis.pid_drive_set(-5,40); // Goes backwards 2 inches to get better angle on 
-                                                      // the rings in the middle
- chassis.pid_wait(); // Waits for the robot to travel -2 inches
+ chassis.pid_drive_set(-12,40); // Goes backwards 12 inches to get a better angle at the 
+                                              // single stack rings
+ chassis.pid_wait(); // Waits for the robot to travel -12 inches
                                                   
+ chassis.pid_turn_set(98,80); // Turns to the right 58 degrees to face the single ring stack
+ chassis.pid_wait(); // Waits for the robot to turn to -98 degrees
 
- chassis.pid_turn_set(187,80); // Turns to the right 89 degrees to face negative 
-                                                    // corner to get rid of the rings
- chassis.pid_wait(); // Waits for the robot to turn to 90 degrees
+ chassis.pid_drive_set(11,DRIVE_SPEED); //Goes forward 11 inches to intake bottom ring
+ chassis.pid_wait(); // Waits for the robot to travel 11 inches
+ pros::delay(300); // Waits 0.3 seconds to ensure the ring is in the intake
 
- Arm.move(25);
- chassis.pid_drive_set(11,DRIVE_SPEED); //Goes forward 12 inches till it reaches the corner
- chassis.pid_wait(); // Waits for the robot to travel 12 inches
- pros::delay(300); // Waits 0.3 seconds to ensure the robot is at the corner
- Arm.move(0);
+ chassis.pid_turn_set(-50,TURN_SPEED); // Turns to the right 148 degrees to face ladder
+ chassis.pid_wait(); // Waits for the robot to turn to 50 degrees
+//  NOJAM.suspend(); // Suspends the anti jam task
 
- chassis.pid_drive_set(-8,40); //Goes backwards 10 inches to get out of the middle
- chassis.pid_wait(); // Waits for the robot to travel -10 inches
+ chassis.pid_drive_set(14,DRIVE_SPEED); // Goes forward 18 inches to touch the ladder
+ chassis.pid_wait(); // Waits for the robot to travel 18 inches
 
- chassis.pid_turn_set(278,TURN_SPEED); // Turns to the right 69 degrees to face ladder
- chassis.pid_wait(); // Waits for the robot to turn to -69 degrees
- NOJAM.suspend();
-
- chassis.pid_drive_set(23,DRIVE_SPEED); // Goes forward 23 inches to touch the ladder
- chassis.pid_wait(); // Waits for the robot to travel 23 inches
+//  Arm.move(127); // Uses the wall stake mech to touch ladder
+//  pros::delay(600); // Waits 0.6 second to ensure arm is up
+//  Arm.move(0); // Stops the wall stake mech
 
 }
 
 void SigAutoBN(){
- NOJAM.resume();
- //Blue_Mode.resume();
-//  Red_Mode.remove();
+ //NOJAM.resume(); // Resumes the anti jam task
+ //AutoClamp.suspend(); // Suspends the autonomous clamp task
+ //AutonAutoClamp.resume(); // Resumes the autonomous clamp task
+ 
+ Arm.move(127); // Uses the wall stake mech to put ring on the alliance stake
+ pros::delay(550); // Waits 0.55 second to ensure ring is on the stake
+ Arm.move(0); // Stops the wall stake mech
 
- chassis.pid_drive_set(5,50); // Goes forward 8 inches to get closer to alliance stake
- chassis.pid_wait_quick_chain(); // Waits for the robot to travel 6 inches to exit quickly
-                                 //then goes to the next line of code
-
- Arm.move(-80); // Uses the fish mech to put ring on the alliance stake
- pros::delay(600); // Waits 0.6 second to ensure ring is on the stake
- Arm.move(0); // Stops the fish mech
-
- chassis.pid_drive_set(-5,50); // Goes backwards 10 inches to get a bette angle to
+ chassis.pid_drive_set(-4,50); // Goes backwards -4 inches to get a bette angle to
                                              // Intake ring stack
- chassis.pid_wait_quick_chain(); // Waits for the robot to move -8 inches to exit quickly
+ chassis.pid_wait_quick_chain(); // Waits for the robot to move -2 inches to exit quickly
                                  //then goes to the next line of code
 
- chassis.pid_turn_set(45,TURN_SPEED); // Turns to the right 45 degrees to face the
+ Arm.move_absolute(0,127); // Brings back the arm
+
+ chassis.pid_turn_set(50,TURN_SPEED); // Turns to the right 50 degrees to face the
                                                      // ring stack
- chassis.pid_wait_quick_chain(); // Waits for the robot to turn 43 degree to exit quickly
+ chassis.pid_wait_quick_chain(); // Waits for the robot to turn 48 degree to exit quickly
                                  //then goes to the next line of code
+
+ Test=3; // Spins the first stage motor to intake the ring
 
  IntakePistonToggle(); // Intake goes up to intake top ring
- IntakeToggle(); // Intake starts spinning to intake ring
- pros::delay(200); // waits 0.2 seconds to ensure intake is up and spinning
+ pros::delay(250); // waits 0.25 seconds to ensure intake is up and spinning
 
- chassis.pid_drive_set(6,DRIVE_SPEED); // Goes forward 5 inches to intake top ring
- chassis.pid_wait_quick_chain(); // Waits for the robot to travel 4 inches to exit quickly
+ chassis.pid_drive_set(13,DRIVE_SPEED); // Goes forward 13 inches to intake top ring
+ chassis.pid_wait_quick_chain(); // Waits for the robot to travel 11 inches to exit quickly
                                  //then goes to the next line of code
 
  IntakePistonToggle(); // Intake goes down to drag ring when it backs up
- pros::delay(300); // waits 0.6 seconds to ensure intake is down
+ pros::delay(250); // waits 0.25 seconds to ensure intake is down
  
- 
- chassis.pid_drive_set(-6,40); // Goes backwards 6 inches to get off the ring stack
- chassis.pid_wait_quick_chain(); // Waits for the robot to travel -4 inches to exit quickly
+ chassis.pid_drive_set(-5,40); // Goes backwards 5 inches to get off the ring stack
+ chassis.pid_wait_quick_chain(); // Waits for the robot to travel -3 inches to exit quickly
                                  //then goes to the next line of code
 
- IntakeToggle(); // Intake stops spinning to keep ring in intake
-
- chassis.pid_turn_set(-28,TURN_SPEED); // Turns to the left 73 degrees to make the back face the goal
- chassis.pid_wait_quick_chain(); // Waits for the robot to turn -26 degrees to exit quickly
+ chassis.pid_turn_set(-38,TURN_SPEED); // Turns to the left 88 degrees to make the back face the goal
+ chassis.pid_wait_quick_chain(); // Waits for the robot to turn -36 degrees to exit quickly
                                  //then goes to the next line of code
 
- chassis.pid_drive_set(-27,DRIVE_SPEED); // Goes backwards 27 inches to grab the goal
- chassis.pid_wait_until(-15); // When the robot has traveled -15 inches
- chassis.pid_speed_max_set(40); // Slow down the robot speed to 50
- chassis.pid_wait_quick_chain(); // Waits for the robot to travel -25 inches to exit quickly
+ chassis.pid_drive_set(-32,DRIVE_SPEED); // Goes backwards 32 inches to grab the goal
+ chassis.pid_wait_until(-18); // When the robot has traveled -18 inches
+ chassis.pid_speed_max_set(40); // Slow down the robot speed to 40
+ chassis.pid_wait_quick_chain(); // Waits for the robot to travel -30 inches to exit quickly
                                  //then goes to the next line of code
-
  ClampToggle(); // Clamp piston extends to grab goal
- pros::delay(250); // waits 0.3 seconds to ensure goal is secured
 
- IntakeToggle(); // Intake starts spinning to intake ring onto goal
+ Test=1; // Intake starts spinning to intake ring onto goal
 
- chassis.pid_turn_set(-160,TURN_SPEED); // Turns to the left 153 degrees to face ladder
- chassis.pid_wait(); // Waits for the robot to turn to -160 degrees
+ chassis.pid_turn_set(-184,TURN_SPEED); // Turns to the left 237 degrees to face ladder
+ chassis.pid_wait(); // Waits for the robot to turn to -184 degrees
 
- chassis.pid_drive_set(15,90); // Goes forward 23 inches to grab ring from the center
- chassis.pid_wait(); // Waits for the robot to travel 23 inches
- pros::delay(300);
+ chassis.pid_drive_set(15,90); // Goes forward 15 inches to grab ring from the center
+ chassis.pid_wait(); // Waits for the robot to travel 13 inches
+ pros::delay(300); // Waits 0.3 seconds to ensure the ring gets on the goal
 
- chassis.pid_drive_set(-14,40); // Goes backwards 19 inches to get line up for 
-                                                       // the single ring stack
- chassis.pid_wait(); // Waits for the robot to travel -19 inches  
+ chassis.pid_turn_set(-156,TURN_SPEED); // Turns to the right 38 degrees to face the second 
+                                                      // middle ring stack 
+ chassis.pid_wait(); // Waits for the robot to turn to -156 degrees  
 
- chassis.pid_turn_set(-116,TURN_SPEED); // Turns to the right 44 degrees to face the single ring stack 
- chassis.pid_wait(); // Waits for the robot to turn to -116 degrees  
-
- chassis.pid_drive_set(24,80); // Goes forward 20 inches to intake the ring
- chassis.pid_wait(); // Waits for the robot to travel 20 inches 
+ chassis.pid_drive_set(12,80); // Goes forward 12 inches to intake the ring
+ chassis.pid_wait(); // Waits for the robot to travel 12 inches 
  pros::delay(400);
 
- chassis.pid_drive_set(-5,40); // Goes backwards 2 inches to get better angle on 
-                                                      // the rings in the middle
- chassis.pid_wait(); // Waits for the robot to travel -2 inches
+ chassis.pid_drive_set(-12,40); // Goes backwards 12 inches to get a better angle at the 
+                                              // single stack rings
+ chassis.pid_wait(); // Waits for the robot to travel -12 inches
                                                   
+ chassis.pid_turn_set(-98,80); // Turns to the right 58 degrees to face the single ring stack
+ chassis.pid_wait(); // Waits for the robot to turn to -98 degrees
 
- chassis.pid_turn_set(-187,80); // Turns to the left 81 degrees to face negative 
-                                                    // corner to get rid of the rings
- chassis.pid_wait(); // Waits for the robot to turn to -187 degrees
+ chassis.pid_drive_set(11,DRIVE_SPEED); //Goes forward 11 inches to intake bottom ring
+ chassis.pid_wait(); // Waits for the robot to travel 11 inches
+ pros::delay(300); // Waits 0.3 seconds to ensure the ring is in the intake
 
- Arm.move(30);
- chassis.pid_drive_set(11,DRIVE_SPEED); //Goes forward 12 inches till it reaches the corner
- chassis.pid_wait(); // Waits for the robot to travel 12 inches
- pros::delay(300); // Waits 0.3 seconds to ensure the robot is at the corner
- Arm.move(0);
+ chassis.pid_turn_set(50,TURN_SPEED); // Turns to the right 148 degrees to face ladder
+ chassis.pid_wait(); // Waits for the robot to turn to 50 degrees
+//  NOJAM.suspend(); // Suspends the anti jam task
 
- chassis.pid_drive_set(-8,40); //Goes backwards 10 inches to get out of the middle
- chassis.pid_wait(); // Waits for the robot to travel -10 inches
+ chassis.pid_drive_set(18,DRIVE_SPEED); // Goes forward 18 inches to touch the ladder
+ chassis.pid_wait(); // Waits for the robot to travel 18 inches
 
- chassis.pid_turn_set(-278,TURN_SPEED); // Turns to the left 91 degrees to face ladder
- chassis.pid_wait(); // Waits for the robot to turn to -278 degrees
- NOJAM.suspend();
-
- chassis.pid_drive_set(23,DRIVE_SPEED); // Goes forward 23 inches to touch the ladder
- chassis.pid_wait(); // Waits for the robot to travel 23 inches
+ Arm.move(127); // Uses the wall stake mech to touch ladder
+ pros::delay(600); // Waits 0.6 second to ensure arm is up
+ Arm.move(0); // Stops the wall stake mech
 
 }
 void SigAWPR(){
@@ -921,48 +896,42 @@ void SigAWPB(){
 }
 
 void SigAutoRP(){
- 
- NOJAM.resume();
-//  Blue_Mode.remove();
-//  Red_Mode.resume();
+ //NOJAM.resume();
+ //AutoClamp.suspend();
+ //AutonAutoClamp.resume();
 
- chassis.pid_drive_set(5,50); // Goes forward 8 inches to get closer to alliance stake
- chassis.pid_wait_quick_chain(); // Waits for the robot to travel 6 inches to exit quickly
-                                 //then goes to the next line of code
+ Arm.move(127); // Uses the wall stake mech to put ring on the alliance stake
+ pros::delay(550); // Waits 0.55 second to ensure ring is on the stake
+ Arm.move(0); // Stops the wall stake mech
 
- Arm.move(-60); // Uses the fish mech to put ring on the alliance stake
- pros::delay(900); // Waits 0.6 second to ensure ring is on the stake
- Arm.move(0); // Stops the fish mech
-
- chassis.pid_drive_set(-7,50); // Goes backwards 10 inches to get a bette angle to
+ chassis.pid_drive_set(-4,50); // Goes backwards 4 inches to get a better angle to
                                              // Intake ring stack
- chassis.pid_wait_quick_chain(); // Waits for the robot to move -8 inches to exit quickly
+ chassis.pid_wait_quick_chain(); // Waits for the robot to move -2 inches to exit quickly
                                  //then goes to the next line of code
+ Arm.move_absolute(0,127); // Brings the arm back
 
- chassis.pid_turn_set(45,TURN_SPEED); // Turns to the right 45 degrees to face the
+ chassis.pid_turn_set(45,TURN_SPEED); // Turns to the left 45 degrees to face the
                                                      // ring stack
- chassis.pid_wait_quick_chain(); // Waits for the robot to turn 45 degree to exit quickly
+ chassis.pid_wait_quick_chain(); // Waits for the robot to turn 43 degree to exit quickly
                                  //then goes to the next line of code
+ Test=3; // Turns on first stage of intake to keep ring only in first stage
 
  IntakePistonToggle(); // Intake goes up to intake top ring
- IntakeToggle(); // Intake starts spinning to intake ring
- pros::delay(200); // waits 0.2 seconds to ensure intake is up and spinning
+ pros::delay(250); // waits 0.25 seconds to ensure intake is up and spinning
 
- chassis.pid_drive_set(6,DRIVE_SPEED); // Goes forward 6 inches to intake top ring
- chassis.pid_wait_quick_chain(); // Waits for the robot to travel 4 inches to exit quickly
+ chassis.pid_drive_set(15,DRIVE_SPEED); // Goes forward 15 inches to intake top ring
+ chassis.pid_wait_quick_chain(); // Waits for the robot to travel 13 inches to exit quickly
                                  //then goes to the next line of code
 
  IntakePistonToggle(); // Intake goes down to drag ring when it backs up
- pros::delay(300); // waits 0.6 seconds to ensure intake is down
+ pros::delay(250); // waits 0.25 seconds to ensure intake is down
  
- chassis.pid_drive_set(-6,40); // Goes backwards 6 inches to get off the ring stack
- chassis.pid_wait_quick_chain(); // Waits for the robot to travel -4 inches to exit quickly
+ chassis.pid_drive_set(-5,40); // Goes backwards 5 inches to get off the ring stack
+ chassis.pid_wait_quick_chain(); // Waits for the robot to travel -3 inches to exit quickly
                                  //then goes to the next line of code
 
- IntakeToggle(); // Intake stops spinning to keep ring in intake
-
- chassis.pid_turn_set(-24,TURN_SPEED); // Turns to the left 69 degrees to make the back face the goal
- chassis.pid_wait_quick_chain(); // Waits for the robot to turn -22 degrees to exit quickly
+ chassis.pid_turn_set(-35,TURN_SPEED); // Turns to the left 80 degrees to make the back face the goal
+ chassis.pid_wait_quick_chain(); // Waits for the robot to turn 33 degrees to exit quickly
                                  //then goes to the next line of code
 
  chassis.pid_drive_set(-27,DRIVE_SPEED); // Goes backwards 27 inches to grab the goal
@@ -970,82 +939,89 @@ void SigAutoRP(){
  chassis.pid_speed_max_set(40); // Slow down the robot speed to 40
  chassis.pid_wait_quick_chain(); // Waits for the robot to travel -25 inches to exit quickly
                                  //then goes to the next line of code
-
  ClampToggle(); // Clamp piston extends to grab goal
  pros::delay(300); // waits 0.3 seconds to ensure goal is secured
 
- IntakeToggle(); // Intake starts spinning to intake ring onto goal
+ Test=1; // Turns on both intake motors to intake ring onto goal
 
- chassis.pid_turn_set(-110,TURN_SPEED); // Turns to the left 84 degrees to ring stack
- chassis.pid_wait_quick_chain(); // Waits for the robot to turn to -110 degrees to exit quickly
+ chassis.pid_turn_set(-145,TURN_SPEED); // Turns to the right 110 degrees to ring stack
+ chassis.pid_wait_quick_chain(); // Waits for the robot to turn to 143 degrees to exit quickly
                                  //then goes to the next line of code
   
- chassis.pid_drive_set(16,DRIVE_SPEED); // Goes forward 16 inches to intake the botton ring
- chassis.pid_wait_quick_chain(); // Waits for the robot to travel 14 inches to exit quickly
+ chassis.pid_drive_set(17,DRIVE_SPEED); // Goes forward 17 inches to intake the botton ring
+ chassis.pid_wait_quick_chain(); // Waits for the robot to travel 15 inches to exit quickly
                                  //then goes to the next line of code
- pros::delay(300); // waits 0.3 seconds to ensure ring is in the intake
+ pros::delay(350); // waits 0.35 seconds to ensure ring is in the intake
 
- chassis.pid_drive_set(-4,40); // Goes backwards 4 inches to get better angle on 
-                                                      // the rings in the middle
- chassis.pid_wait_quick_chain(); // Waits for the robot to travel -2 inches to exit quickly
-                                 //then goes to the next line of code
- chassis.pid_turn_set(40,80); // Turns to the right 200 degrees to face the ladder
- chassis.pid_wait();
- 
- chassis.pid_drive_set(28,40); // Goes forward 28 inches to get to the touch 
+ chassis.pid_turn_set(40,80); // Turns to the left 200 degrees to face the ladder
+ chassis.pid_wait(); // waits for the robot to turn to -40
+
+ chassis.pid_drive_set(22,DRIVE_SPEED); // Goes forward 22 inches to get to the touch 
                                                       // the ladder using the arm
- chassis.pid_wait(); // Waits for the robot to travel 32 inches
+ chassis.pid_wait_quick_chain(); // Waits for the robot to travel 20 inches
 
- NOJAM.suspend();
+ Arm.move(127); // Uses the wall stake mech to touch ladder
+ pros::delay(700); // Waits 0.7 second to ensure wall stake mech touches ladder
+ Arm.move(0); // Stops the wall stake mech
+
+//  chassis.pid_turn_set(90,80);
+//  chassis.pid_wait();
+//  Test=2; //
+
+//  chassis.pid_drive_set(20,60);
+//  chassis.pid_wait();
+
+//  chassis.pid_drive_set(-6,60);
+//  chassis.pid_wait();
+
+// //  Arm.move_absolute(1800, 127);
+ 
+// //  chassis.pid_drive_set(28,40); // Goes forward 28 inches to get to the touch 
+// //                                                       // the ladder using the arm
+// //  chassis.pid_wait(); // Waits for the robot to travel 32 inches
+
+//  NOJAM.suspend();
+ //AutonAutoClamp.suspend();
+ //AutoClamp.resume();
 }
 
-
 void SigAutoBP(){
- NOJAM.resume();
-//  Blue_Mode.resume();
-//  Red_Mode.remove();
+ //NOJAM.resume();
+ //AutoClamp.suspend();
+ AutonAutoClamp.resume();
 
- chassis.pid_drive_set(5,50); // Goes forward 8 inches to get closer to alliance stake
- chassis.pid_wait_quick_chain(); // Waits for the robot to travel 6 inches to exit quickly
-                                 //then goes to the next line of code
+ Arm.move(127); // Uses the wall stake mech to put ring on the alliance stake
+ pros::delay(550); // Waits 0.55 second to ensure ring is on the stake
+ Arm.move(0); // Stops the wall stake mech
 
- Arm.move(-60); // Uses the fish mech to put ring on the alliance stake
- pros::delay(900); // Waits 0.6 second to ensure ring is on the stake
- Arm.move(0); // Stops the fish mech
-
-
- chassis.pid_drive_set(-7,50); // Goes backwards 10 inches to get a bette angle to
+ chassis.pid_drive_set(-4,50); // Goes backwards 4 inches to get a better angle to
                                              // Intake ring stack
- chassis.pid_wait_quick_chain(); // Waits for the robot to move -8 inches to exit quickly
+ chassis.pid_wait_quick_chain(); // Waits for the robot to move -2 inches to exit quickly
                                  //then goes to the next line of code
-
-chassis.pid_drive_set(-2,DRIVE_SPEED);
-chassis.pid_wait_quick_chain();
+ Arm.move_absolute(0,127); // Brings the arm back
 
  chassis.pid_turn_set(-45,TURN_SPEED); // Turns to the left 45 degrees to face the
                                                      // ring stack
  chassis.pid_wait_quick_chain(); // Waits for the robot to turn 43 degree to exit quickly
                                  //then goes to the next line of code
+ Test=3; // Turns on first stage of intake to keep ring only in first stage
 
  IntakePistonToggle(); // Intake goes up to intake top ring
- IntakeToggle(); // Intake starts spinning to intake ring
- pros::delay(200); // waits 0.2 seconds to ensure intake is up and spinning
+ pros::delay(250); // waits 0.25 seconds to ensure intake is up and spinning
 
- chassis.pid_drive_set(6,DRIVE_SPEED); // Goes forward 6 inches to intake top ring
- chassis.pid_wait_quick_chain(); // Waits for the robot to travel 4 inches to exit quickly
+ chassis.pid_drive_set(15,DRIVE_SPEED); // Goes forward 15 inches to intake top ring
+ chassis.pid_wait_quick_chain(); // Waits for the robot to travel 13 inches to exit quickly
                                  //then goes to the next line of code
 
  IntakePistonToggle(); // Intake goes down to drag ring when it backs up
- pros::delay(300); // waits 0.6 seconds to ensure intake is down
+ pros::delay(250); // waits 0.25 seconds to ensure intake is down
  
- chassis.pid_drive_set(-6,40); // Goes backwards 6 inches to get off the ring stack
- chassis.pid_wait_quick_chain(); // Waits for the robot to travel -4 inches to exit quickly
+ chassis.pid_drive_set(-5,40); // Goes backwards 5 inches to get off the ring stack
+ chassis.pid_wait_quick_chain(); // Waits for the robot to travel -3 inches to exit quickly
                                  //then goes to the next line of code
 
- IntakeToggle(); // Intake stops spinning to keep ring in intake
-
- chassis.pid_turn_set(24,TURN_SPEED); // Turns to the left 69 degrees to make the back face the goal
- chassis.pid_wait_quick_chain(); // Waits for the robot to turn 22 degrees to exit quickly
+ chassis.pid_turn_set(35,TURN_SPEED); // Turns to the left 80 degrees to make the back face the goal
+ chassis.pid_wait_quick_chain(); // Waits for the robot to turn 33 degrees to exit quickly
                                  //then goes to the next line of code
 
  chassis.pid_drive_set(-27,DRIVE_SPEED); // Goes backwards 27 inches to grab the goal
@@ -1053,33 +1029,50 @@ chassis.pid_wait_quick_chain();
  chassis.pid_speed_max_set(40); // Slow down the robot speed to 40
  chassis.pid_wait_quick_chain(); // Waits for the robot to travel -25 inches to exit quickly
                                  //then goes to the next line of code
-
  ClampToggle(); // Clamp piston extends to grab goal
  pros::delay(300); // waits 0.3 seconds to ensure goal is secured
 
- IntakeToggle(); // Intake starts spinning to intake ring onto goal
+ Test=1; // Turns on both intake motors to intake ring onto goal
 
- chassis.pid_turn_set(110,TURN_SPEED); // Turns to the right 84 degrees to ring stack
- chassis.pid_wait_quick_chain(); // Waits for the robot to turn to -108 degrees to exit quickly
+ chassis.pid_turn_set(145,TURN_SPEED); // Turns to the right 110 degrees to ring stack
+ chassis.pid_wait_quick_chain(); // Waits for the robot to turn to 143 degrees to exit quickly
                                  //then goes to the next line of code
   
- chassis.pid_drive_set(16,DRIVE_SPEED); // Goes forward 16 inches to intake the botton ring
- chassis.pid_wait_quick_chain(); // Waits for the robot to travel 14 inches to exit quickly
+ chassis.pid_drive_set(17,DRIVE_SPEED); // Goes forward 17 inches to intake the botton ring
+ chassis.pid_wait_quick_chain(); // Waits for the robot to travel 15 inches to exit quickly
                                  //then goes to the next line of code
- pros::delay(300); // waits 0.3 seconds to ensure ring is in the intake
+ pros::delay(350); // waits 0.35 seconds to ensure ring is in the intake
 
- chassis.pid_drive_set(-4,40); // Goes backwards 4 inches to get better angle on 
-                                                      // the rings in the middle
- chassis.pid_wait_quick_chain(); // Waits for the robot to travel -2 inches to exit quickly
-                                 //then goes to the next line of code
  chassis.pid_turn_set(-40,80); // Turns to the left 200 degrees to face the ladder
  chassis.pid_wait(); // waits for the robot to turn to -40
- 
- chassis.pid_drive_set(28,40); // Goes forward 28 inches to get to the touch 
-                                                      // the ladder using the arm
- chassis.pid_wait(); // Waits for the robot to travel 32 inches
 
- NOJAM.suspend();
+ chassis.pid_drive_set(22,DRIVE_SPEED); // Goes forward 22 inches to get to the touch 
+                                                      // the ladder using the arm
+ chassis.pid_wait_quick_chain(); // Waits for the robot to travel 20 inches
+
+ Arm.move(127); // Uses the wall stake mech to touch ladder
+ pros::delay(700); // Waits 0.7 second to ensure wall stake mech touches ladder
+ Arm.move(0); // Stops the wall stake mech
+
+//  chassis.pid_turn_set(90,80);
+//  chassis.pid_wait();
+//  Test=2; //
+
+//  chassis.pid_drive_set(20,60);
+//  chassis.pid_wait();
+
+//  chassis.pid_drive_set(-6,60);
+//  chassis.pid_wait();
+
+// //  Arm.move_absolute(1800, 127);
+ 
+// //  chassis.pid_drive_set(28,40); // Goes forward 28 inches to get to the touch 
+// //                                                       // the ladder using the arm
+// //  chassis.pid_wait(); // Waits for the robot to travel 32 inches
+
+//  NOJAM.suspend();
+ //AutonAutoClamp.suspend();
+ //AutoClamp.resume();
 }
 
 void GoalRush(){
@@ -1213,15 +1206,12 @@ void Skills(){
 void SkillsV2(){
 // AutoClamp.suspend();
  //AutonAutoClamp.suspend();
-//  Red_Mode.resume();
- //NOJAM.resume();
+  Red_Mode.suspend();
+ NOJAM.resume();
 
  //Color_sorter.set_value(1);
- Intakefirst.move(127); // Turns on the intake to put preload on alliance stake
- IntakeSecond.move(127);
+ Test=1;
  pros::delay(300); // waits 0.5 seconds to ensure ring is on the alliance stake
- Intakefirst.move(0); // turn off the intake
- IntakeSecond.move(0);
 
  chassis.pid_drive_set(5,DRIVE_SPEED,false); // Goes forward 5 inches to turn properly
  chassis.pid_wait_quick_chain(); // waits for the robot to travel 3 inches and exit early for next line of code
@@ -1236,9 +1226,7 @@ void SkillsV2(){
 
  ClampToggle(); // Clamp piston extends to grab goal
  pros::delay(300); // waits 0.3 seconds to ensure goal is secured
- 
- Intakefirst.move(127); // Intake starts spinning to intake ring onto goal
- IntakeSecond.move(127);
+
  chassis.pid_turn_set(4,TURN_SPEED); // turns to the left 135 degrees to face the ring
  chassis.pid_wait_quick_chain(); // waits for the robot to turn to 0 degrees
 
@@ -1275,13 +1263,13 @@ void SkillsV2(){
  chassis.pid_turn_set(-18,TURN_SPEED); // turns to the left 55 degrees to face the goal
  chassis.pid_wait_quick_chain(); // waits for the robot to turn to -8 degrees and exit early for next line of code
 
- chassis.pid_drive_set(-10,40); // Goes forward 18 inches to push the goal to the corner
+ chassis.pid_drive_set(-12,40); // Goes forward 18 inches to push the goal to the corner
  chassis.pid_wait(); // waits for the robot to travel 16 inches and exit early for next line of code
 
  ClampToggle(); // Clamp piston retracts to drop off goal
  pros::delay(400); // waits 0.4 seconds to ensure goal is out of clamp
 
- chassis.pid_drive_set(7,DRIVE_SPEED); // Goes forward 5 inches to get out of the corner
+ chassis.pid_drive_set(6,DRIVE_SPEED); // Goes forward 5 inches to get out of the corner
  chassis.pid_wait_quick_chain(); // waits for the robot to travel 3 inches and exit early for next line of code
 
  chassis.pid_turn_set(88,TURN_SPEED); // turns to the right 90 degrees to make the back face the ladder
@@ -1362,8 +1350,7 @@ void SkillsV2(){
  chassis.pid_wait_quick_chain();
 
  ClampToggle(); // Clamps onto the middle goal in the other side
- Intakefirst.move(127); // Spins intake to put first ring into goal
- IntakeSecond.move(127);
+ Test =1;
  pros::delay(250); // waits 0.3 seconds to ensure goal and ring are secured 
 
  chassis.drive_angle_set(129); // Sets the drive angle to 129 degrees
@@ -1430,15 +1417,13 @@ void SkillsV2(){
  chassis.pid_turn_set(80,TURN_SPEED);  // turns to the left 80 degrees to face the alliance stake
  chassis.pid_wait_quick_chain(); // waits for the robot to turn to 78 degrees and exit early for next line of code
 
- Intakefirst.move(127); // Turns on the intake to intake the ring
- IntakeSecond.move(127);
+ Test = 1;
  chassis.pid_drive_set(24,DRIVE_SPEED); // Goes forward 24 inches to intake the ring
  chassis.pid_wait_quick_chain(); // waits for the robot to travel 22 inches and exit early for next line of code
  pros::delay(200); // waits 0.2 seconds to ensure ring is in the intake
- Intakefirst.move(0); // Stops the intake
- IntakeSecond.move(0);
+ Test =0;
 
- chassis.pid_drive_set(38,90); // Goes forward 32 inches to get in front of alliance stake
+ chassis.pid_drive_set(30,90); // Goes forward 32 inches to get in front of alliance stake
  chassis.pid_wait(); // waits for the robot to travel 32 inches
 
  chassis.pid_turn_set(171,TURN_SPEED); // turns to the right 91 degrees to face the alliance stake
@@ -1470,5 +1455,5 @@ void SkillsV2(){
 //  Arm.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD); // Arm holds the position
 //  Arm.move(0); // Arm goes up to hang
 
-
+ 
 }

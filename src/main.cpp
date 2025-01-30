@@ -37,8 +37,7 @@ void initialize() {
   //gyro.reset();
   //Color_sorter.set_value(0);
   OP.set_led_pwm(100);
-  //22Blue_Mode.suspend();
-  // Red_Mode.suspend();
+
 
 
   pros::delay(500);  // Stop the user from doing anything while legacy ports configure
@@ -58,16 +57,19 @@ void initialize() {
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
       //Auton("Swing Example\n\nSwing in an 'S' curve", swing_example),
-      Auton("Blue Negative AWP\n\nDoes a AWP in blue negative side.", Blue_Negative_AWP),
-      Auton("Blue Positive AWP\n\nDoes a AWP in blue positive side.", Blue_Positive_AWP),
-      Auton("Red Negative AWP\n\nDoes a AWP in red negative side.", Red_Negative_AWP),
-      Auton("Red Positive AWP\n\nDoes a AWP in red positive side.", Red_Positive_AWP),
-      Auton("Blue Single Goal\n\n Gets one goal and fills it up.", Blue_Single_Goal),
-      Auton("Red Single Goal\n\n Gets one goal and fills it up.", Red_Single_Goal),
-      // Auton("Sig Negative Red\n\n scores on alliance stake and scores 4 more on the neg goal.",SigAutoRN),
-      // Auton("Sig Negative Blue\n\n scores on alliance stake and scores 4 more on the neg goal.",SigAutoBN),
-      // Auton("Sig Positive Red\n\n scores on alliance stake and scores 2 more on the pos goal.",SigAutoRP),
-      // Auton("Sig Positive Blue\n\n scores on alliance stake and scores 2 more on the pos goal.",SigAutoBP),
+      // Auton("Blue Negative AWP\n\nDoes a AWP in blue negative side.", Blue_Negative_AWP),
+      // Auton("Blue Positive AWP\n\nDoes a AWP in blue positive side.", Blue_Positive_AWP),
+      // Auton("Red Negative AWP\n\nDoes a AWP in red negative side.", Red_Negative_AWP),
+      // Auton("Red Positive AWP\n\nDoes a AWP in red positive side.", Red_Positive_AWP),
+      // Auton("Blue Single Goal\n\n Gets one goal and fills it up.", Blue_Single_Goal),
+      // Auton("Red Single Goal\n\n Gets one goal and fills it up.", Red_Single_Goal),
+
+      Auton("Sig Negative Red\n\n scores on alliance stake and scores 4 more on the neg goal.",SigAutoRN),
+      Auton("Sig Negative Blue\n\n scores on alliance stake and scores 4 more on the neg goal.",SigAutoBN),
+
+      Auton("Sig Positive Red\n\n scores on alliance stake and scores 2 more on the pos goal.",SigAutoRP),
+      Auton("Sig Positive Blue\n\n scores on alliance stake and scores 2 more on the pos goal.",SigAutoBP),
+
       // Auton("Sig AWP \n\n Scores on alliance stake, two more on neg goal, 1 more on pos goal", SigAWPR),
       Auton("Elim Auto \n\n Gets thrid goal and puts on ring on it.", GoalRush),
       Auton("Skills", SkillsV2),
@@ -145,10 +147,9 @@ void opcontrol() { // Driver Control
   // This is preference to what you like to drive on
   pros::motor_brake_mode_e_t driver_preference_brake = /*MOTOR_BRAKE_COAST;*/ MOTOR_BRAKE_HOLD;
   //AutonAutoClamp.suspend();
-  NOJAM.suspend();
-  // Blue_Mode.suspend();
-  // Red_Mode.suspend();
-  
+  AutonAutoClamp.suspend();
+  NOJAM.suspend();  
+  IntakeC.suspend();
 
   
   while (true) {
@@ -171,26 +172,37 @@ void opcontrol() { // Driver Control
       else if(master.get_digital(DIGITAL_R1)){ // When holding button R1
         Test = 2;
       }
-      else if(master.get_digital(DIGITAL_DOWN)){ // When holding button down
-        Intake_P.set_value(1); // Brings the intake up
-      }
-
-      // else if(master.get_digital(DIGITAL_L2)){
-      //   Intakefirst.move(127);
-      //   // if( RingStop.get_distance() < 225){
-      //   //  // pros::delay(5);
-      //   //   Intakefirst.move(0);
-      //   // }
-      //  }
+      // else if(master.get_digital(DIGITAL_DOWN)){ // When holding button down
+      //   Intake_P.set_value(1); // Brings the intake up
+      // }
       else{
       //   Intakefirst.move(0);
       //   IntakeSecond.move(0);
         Test = 0;
-        Intake_P.set_value(0);
+        // Intake_P.set_value(0);
       } 
+
+      if(master.get_digital_new_press(DIGITAL_DOWN)){
+        IntakePistonToggle();
+      }
+
+      // if(master.get_digital_new_press(DIGITAL_L2)){
+      //   Arm_Toggle();
+      // }
+    
+      // if(master.get_digital(DIGITAL_L1)){
+      //   Arm.move(127);
+      // }
+      // else{
+      //   Arm.move(0);
+      // }
       
       if(master.get_digital_new_press(DIGITAL_L1)){
         Arm_Toggle();
+      }
+      if(master.get_digital_new_press(DIGITAL_L2)){
+        Arm.move_absolute(0,127);
+        ArmV = 0;
       }
       if(master.get_digital_new_press(DIGITAL_LEFT)){ // When button left is pressed
        Task_Toggle(); // Toggle to turn on or off on task
@@ -204,12 +216,6 @@ void opcontrol() { // Driver Control
       if(master.get_digital_new_press(DIGITAL_B)){ // When button B is pressed
         ClampToggle(); // Toggle to extend or retract clamp
       }
-      // if(master.get_digital_new_press(DIGITAL_A)){
-      //   Blue_Mode.remove();
-      // }
-      // if (master.get_digital_new_press(DIGITAL_X)){
-      //   Red_Mode.remove();
-      // }
 
     pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
   }

@@ -19,7 +19,7 @@ inline pros::Motor Right_Middle(17);
 inline pros::Motor Right_Back(19);
 inline pros::Motor Intakefirst(-15);   
 inline pros::Motor IntakeSecond(-10);
-inline pros::Motor Arm(12);
+inline pros::Motor Arm(-6);
 
 
 // Pneumatics
@@ -39,4 +39,5 @@ inline pros::Optical OP(8);
 inline pros::adi::DigitalIn LimitSwitch2 ('E');
 inline pros::ADIAnalogIn LineTrack('A');
 inline pros::ADIAnalogIn RingStopper('G');
-inline pros::Distance Distance_S(14);
+inline pros::Distance Distance_S1(14);
+inline pros::Distance Disntance_S2(4);

@@ -315,6 +315,24 @@ void IntakeReverseToggle(){
   }
 }
 
+void IntakeControls(){
+  while(true){
+   if(Test == 1){
+    Intakefirst.move(127);
+    IntakeSecond.move(127);
+   }
+   else if(Test == 2){
+    Intakefirst.move(-127);
+    IntakeSecond.move(-127);
+   }
+   else{
+    Intakefirst.move(0);
+    IntakeSecond.move(0);
+   }
+  pros::delay(20);
+  }
+}
+
 // Clamp Controls
 
 void ClampToggle(){
@@ -435,22 +453,34 @@ void LeftDoinker_Toggle(){
 
 void Arm_Set_Toggle(){
 
-  Arm.move_absolute(0,127);  
+  Arm.move_absolute(350,127);  
 
 }
 
 void Arm_Out(){
-  Arm.move_absolute(-600 ,60);
+  Arm.move_absolute(2500 ,127);
 }
 
-int ArmV = -1; // Toggle state variable for the Arm (1 for on, -1 for off)
 void Arm_Toggle(){
-  ArmV = ArmV * -1;
+  ArmV = ArmV +1;
   if(ArmV == 1){
-    Arm_Out();
-  }
-  else if(ArmV == -1){
     Arm_Set_Toggle();
+  }
+  else if(ArmV == 2){
+    Intakefirst.move(-20);
+   pros::delay(50);
+   Intakefirst.move(0);
+    Arm.move_absolute(1300, 127);
+  }
+  else if(ArmV == 3){
+    Arm.move_absolute(2100, 127);
+  }
+  else if(ArmV == 4){
+    Arm.move_absolute(2500, 127);
+  }
+  else if(ArmV == 5){
+    Arm.move_absolute(3200, 127);
+    ArmV = 0;
   }
 }
 
@@ -475,14 +505,13 @@ void RedColorSensor_Task(){
       int hue = OP.get_hue();
 
             // Check if the hue corresponds to red (typical red hue is around 0-30 degrees)
-      if (hue >= 100) {
+      if (hue >= 61) {
           // Reverses intake for a bit
-          pros::delay(120); // Delays for 120 ms
+          pros::delay(160); // Delays for 120 ms
           Intakefirst.move(-127); // Reverses inatke
-          IntakeSecond.move(-127); // Reverses intake 
-          pros::delay(250); // Delay for 300 ms
+          pros::delay(180); // Delay for 300 ms
       }
-      else if(hue <= 90){
+      else if(hue <= 60){
         Intakefirst.move(127);
         IntakeSecond.move(127);
       }
@@ -490,6 +519,9 @@ void RedColorSensor_Task(){
     else if (Test ==2){
       Intakefirst.move(-127); // Spin Inakte first motor to 127 voltages (forwards)
       IntakeSecond.move(-127);
+    }
+    else if(Test == 3){
+      IntakeSecond.move(127);
     }
     else{
       Intakefirst.move(0);
@@ -519,9 +551,9 @@ void BlueColorSensor_task(){
           pros::delay(120); // Delays for 120 ms
           Intakefirst.move(-127); // Reverses inatke
           IntakeSecond.move(-127); // Reverses intake 
-          pros::delay(250); // Delay for 300 ms
+          pros::delay(150); // Delay for 300 ms
       }
-      else if(hue >= 30){
+      else{
         Intakefirst.move(127);
         IntakeSecond.move(127);
       }
@@ -529,6 +561,9 @@ void BlueColorSensor_task(){
     else if (Test ==2){
       Intakefirst.move(-127); // Spin Inakte first motor to 127 voltages (forwards)
       IntakeSecond.move(-127);
+    }
+    else if(Test == 3){
+      IntakeSecond.move(127);
     }
     else{
       Intakefirst.move(0);
@@ -557,29 +592,39 @@ void ClampOut() {
         // // bool limit2Pressed = LimitSwitch2.get_value(); // Check if LimitSwitch2 is pressed
         bool buttonBPressed = master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B); // Check if Button B is pressed
 
-        if (Distance_S.get_distance() < 130) {
+        if (Distance_S1.get_distance() < 130 && Disntance_S2.get_distance() < 130) {
             // If both limit switches are pressed, activate the clamp
-            Clamp.set_value(true); // Extend the piston
             pistonState = true;   // Update the piston state as active
+            Clamp.set_value(pistonState); // Extend the piston
 
             if (buttonBPressed) {
               // If Button B is pressed while both switches are active, deactivate the piston
-              Clamp.set_value(false); // Retract the piston
               pistonState = false;    // Update the piston state as inactive
-              pros::delay(800);       // Short delay to prevent rapid state changes
+              Clamp.set_value(pistonState); // Retract the piston
+              while(true){
+               if(Distance_S1.get_distance() < 120 || Disntance_S2.get_distance() < 120){
+                pistonState = false;
+                Clamp.set_value(pistonState);
+               }
+               else if(!(Distance_S1.get_distance() < 120 || Disntance_S2.get_distance() < 120)){
+                break;
+               }
+               pros::delay(20);
             }
-        } else if (buttonBPressed) {
+            }
+         } 
+        else if (buttonBPressed) {
             // If Button B is pressed
-            if (Distance_S.get_distance() > 80) {
+            // if (Distance_S1.get_distance() > 80 && Disntance_S2.get_distance() > 80) {
                 // If neither limit switch is pressed, toggle the piston state
                 pistonState = !pistonState; // Toggle the piston state
                 Clamp.set_value(pistonState); // Set the piston based on the new state
-                pros::delay(500);       // Short delay to prevent rapid state changes
-            } else if (Distance_S.get_distance() < 80) {
-                // If either limit switch is pressed, deactivate the piston
-                Clamp.set_value(false); // Retract the piston
-                pistonState = false;    // Update the piston state as inactive
-            }
+                pros::delay(300);       // Short delay to prevent rapid state changes
+            // } else if (Distance_S1.get_distance() < 80 && Disntance_S2.get_distance() < 80) {
+            //     // If either limit switch is pressed, deactivate the piston
+            //     Clamp.set_value(false); // Retract the piston
+            //     pistonState = false;    // Update the piston state as inactive
+             //}
         }
 
         // Add a short delay to prevent excessive looping and CPU usage
@@ -589,55 +634,57 @@ void ClampOut() {
 
 
 
-// AutonClampOut: Controls the clamp mechanism autonomously based on limit switch inputs.
-// void AutonClampOut() {
-//   // while (true) {  
-//   //   // Check if either limit switch is pressed
-//   //   if (LimitSwitch1.get_value() == 1 || LimitSwitch2.get_value() == 1) {
-//   //       // If at least one switch is pressed, activate the clamp
-//   //       Clamp.set_value(1); // Extend the piston to hold an object
-//   //   } 
-//   //   pros::delay(20); // Add a small delay to reduce CPU usage in this loop
-//   // }
-// }
+//AutonClampOut: Controls the clamp mechanism autonomously based on limit switch inputs.
+void AutonClampOut() {
+  while (true) {  
+    // Check if either limit switch is pressed
+    if (Distance_S1.get_distance() < 130 && Disntance_S2.get_distance() < 130) {
+        // If at least one switch is pressed, activate the clamp
+        Clamp.set_value(1); // Extend the piston to hold an object
+    } 
+    pros::delay(20); // Add a small delay to reduce CPU usage in this loop
+  }
+}
 
 // Initialize CancelV to -1, used to track toggling of the AutonClampCancel function
 int CancelV = -1;
 
-// AutonClampCancel: Toggles the autonomous clamp mechanism on/off.
-// void AutonClampCancel() {
-//   // Toggle CancelV between -1 and 1
-//   CancelV = CancelV * -1;
+//AutonClampCancel: Toggles the autonomous clamp mechanism on/off.
+void AutonClampCancel() {
+  // Toggle CancelV between -1 and 1
+  CancelV = CancelV * -1;
 
-//   if (CancelV == 1) {
-//     // If CancelV is 1, suspend the autonomous clamp task and deactivate the clamp
-//     AutonAutoClamp.suspend(); // Pause the autonomous clamp task
-//     Clamp.set_value(0);       // Retract the clamp piston
-//   } else if (CancelV == -1) {
-//     // If CancelV is -1, resume the autonomous clamp task
-//     AutonAutoClamp.resume(); // Resume the autonomous clamp task
-//   }
-// }
+  if (CancelV == 1) {
+    // If CancelV is 1, suspend the autonomous clamp task and deactivate the clamp
+    AutonAutoClamp.suspend(); // Pause the autonomous clamp task
+    Clamp.set_value(0);       // Retract the clamp piston
+  } else if (CancelV == -1) {
+    // If CancelV is -1, resume the autonomous clamp task
+    AutonAutoClamp.resume(); // Resume the autonomous clamp task
+  }
+}
 
 // Task Toggle: A function that toggles between suspending and resuming tasks based on a toggle variable
 int TaskV = -1; // Toggle state variable for task control (1 to suspend Blue_Mode, -1 to resume it)
 
 void Task_Toggle() {
   
-  // // Toggle the state of TaskV each time this function is called
-  // TaskV = TaskV * -1;
+  // Toggle the state of TaskV each time this function is called
+  TaskV = TaskV * -1;
   
-  // // If TaskV is 1, suspend the Blue_Mode task
-  // if (TaskV == 1) {
-  //   Red_Mode.suspend(); // (Commented out) This line would suspend Red_Mode if uncommented
-  //   Blue_Mode.suspend();   // Suspend the Blue_Mode task
-  // }
+  // If TaskV is 1, suspend the Blue_Mode task
+  if (TaskV == 1) {
+    Red_Mode.suspend(); // (Commented out) This line would suspend Red_Mode if uncommented
+    //Blue_Mode.suspend();   // Suspend the Blue_Mode task
+    IntakeC.resume(); // Resume the IntakeC task
+  }
   
-  // // If TaskV is -1, resume the Blue_Mode task
-  // else if (TaskV == -1) {
-  //   Red_Mode.resume(); // (Commented out) This line would resume Red_Mode if uncommented
-  //   Blue_Mode.resume();    // Resume the Blue_Mode task
-  // }
+  // If TaskV is -1, resume the Blue_Mode task
+  else if (TaskV == -1) {
+    Red_Mode.resume(); // (Commented out) This line would resume Red_Mode if uncommented
+    //Blue_Mode.resume();    // Resume the Blue_Mode task
+    IntakeC.suspend(); // Resume the IntakeC task
+  }
 }
 
 void Anti_Jam(){
@@ -647,12 +694,14 @@ void Anti_Jam(){
         if (Test == 1) { // if intake is on
             // Move the intake forward
             Intakefirst.move(127);
+            IntakeSecond.move(127);
             pros::delay(50); // delay to prevent reversing when it starts
 
             // Check if the voltage of the intake equals 0
             if (Intakefirst.get_actual_velocity() == 0) {
                 // Reverse the intake for 200 ms
                 Intakefirst.move(-127);
+                IntakeSecond.move(-127);
                 pros::delay(220);
                 // Resume normal intake operation
                 Intakefirst.move(127);
