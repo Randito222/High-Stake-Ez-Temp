@@ -16,10 +16,10 @@
 // Chassis constructor
 ez::Drive chassis(
     // These are your drive motors, the first motor is used for sensing!
-    {-7,-5,-9},  // Left Chassis Ports (negative port will reverse it!)
-    {13,17,19},     // Right Chassis Ports (negative port will reverse it!)
+    {-19,-18,-17},  // Left Chassis Ports (negative port will reverse it!)
+    {9,8,7},     // Right Chassis Ports (negative port will reverse it!)
 
-    16,      // IMU Port
+    15,      // IMU Port
     3.25,  // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!)
     450);   // Wheel RPM
 
@@ -64,14 +64,15 @@ void initialize() {
       // Auton("Blue Single Goal\n\n Gets one goal and fills it up.", Blue_Single_Goal),
       // Auton("Red Single Goal\n\n Gets one goal and fills it up.", Red_Single_Goal),
 
-      Auton("Sig Negative Red\n\n scores on alliance stake and scores 4 more on the neg goal.",SigAutoRN),
-      Auton("Sig Negative Blue\n\n scores on alliance stake and scores 4 more on the neg goal.",SigAutoBN),
+      // Auton("Sig Negative Red\n\n scores on alliance stake and scores 4 more on the neg goal.",SigAutoRN),
+      // Auton("Sig Negative Blue\n\n scores on alliance stake and scores 4 more on the neg goal.",SigAutoBN),
 
-      Auton("Sig Positive Red\n\n scores on alliance stake and scores 2 more on the pos goal.",SigAutoRP),
-      Auton("Sig Positive Blue\n\n scores on alliance stake and scores 2 more on the pos goal.",SigAutoBP),
+      // Auton("Sig Positive Red\n\n scores on alliance stake and scores 2 more on the pos goal.",SigAutoRP),
+      // Auton("Sig Positive Blue\n\n scores on alliance stake and scores 2 more on the pos goal.",SigAutoBP),
 
-      // Auton("Sig AWP \n\n Scores on alliance stake, two more on neg goal, 1 more on pos goal", SigAWPR),
-      Auton("Elim Auto \n\n Gets thrid goal and puts on ring on it.", GoalRush),
+      //Auton("Sig AWP \n\n Scores on alliance stake, two more on pos goal, 1 more on neg goal", SigAWPB),
+      //Auton("Sig AWP \n\n Scores on alliance stake, two more on neg goal, 1 more on pos goal", SigAWPR),
+      // Auton("Elim Auto \n\n Gets thrid goal and puts on ring on it.", GoalRush),
       Auton("Skills", SkillsV2),
   });
 
@@ -148,7 +149,9 @@ void opcontrol() { // Driver Control
   pros::motor_brake_mode_e_t driver_preference_brake = /*MOTOR_BRAKE_COAST;*/ MOTOR_BRAKE_HOLD;
   //AutonAutoClamp.suspend();
   AutonAutoClamp.suspend();
-  NOJAM.suspend();  
+  //NOJAM.suspend();  
+  Red_Mode.suspend();
+  Blue_Mode.suspend();
   IntakeC.suspend();
 
   
@@ -168,9 +171,13 @@ void opcontrol() { // Driver Control
       //  Intakefirst.move(127);
       //  IntakeSecond.move(127);
        Test = 1;
+       Intakefirst.move(127);
+       IntakeSecond.move(127);
       }
       else if(master.get_digital(DIGITAL_R1)){ // When holding button R1
         Test = 2;
+        Intakefirst.move(-127);
+       IntakeSecond.move(-127);
       }
       // else if(master.get_digital(DIGITAL_DOWN)){ // When holding button down
       //   Intake_P.set_value(1); // Brings the intake up
@@ -179,42 +186,33 @@ void opcontrol() { // Driver Control
       //   Intakefirst.move(0);
       //   IntakeSecond.move(0);
         Test = 0;
+        Intakefirst.move(0);
+       IntakeSecond.move(0);
         // Intake_P.set_value(0);
       } 
 
       if(master.get_digital_new_press(DIGITAL_DOWN)){
-        IntakePistonToggle();
+        Arm_Descore_Reset();
       }
-
-      // if(master.get_digital_new_press(DIGITAL_L2)){
-      //   Arm_Toggle();
-      // }
-    
-      // if(master.get_digital(DIGITAL_L1)){
-      //   Arm.move(127);
-      // }
-      // else{
-      //   Arm.move(0);
-      // }
       
       if(master.get_digital_new_press(DIGITAL_L1)){
-        Arm_Toggle();
+        Arm_score();
       }
       if(master.get_digital_new_press(DIGITAL_L2)){
-        Arm.move_absolute(0,127);
-        ArmV = 0;
+        Arm_past_score();
       }
       if(master.get_digital_new_press(DIGITAL_LEFT)){ // When button left is pressed
        Task_Toggle(); // Toggle to turn on or off on task
-      }
-      if(master.get_digital_new_press(DIGITAL_RIGHT)){ // When button right is pressed
-        LeftDoinker_Toggle(); // Toggle to extend or retract doinker
       }
       if(master.get_digital_new_press(DIGITAL_Y)){ // When button Y is pressed
         RightDoinker_Toggle();
       }
       if(master.get_digital_new_press(DIGITAL_B)){ // When button B is pressed
         ClampToggle(); // Toggle to extend or retract clamp
+      }
+      if(master.get_digital_new_press(DIGITAL_X)){ // When button X is pressed
+        
+
       }
 
     pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME

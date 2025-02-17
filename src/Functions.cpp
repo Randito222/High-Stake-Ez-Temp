@@ -425,24 +425,8 @@ void RightDoinker_Toggle(){
   }
 }
 
-int LeftDoinkerV = -1;  // Toggle state variable for the Doinker (1 for on, -1 for off)
 
-// LeftDoinker_Toggle: A function to toggle the Left Doinker mechanism on or off
-void LeftDoinker_Toggle(){
-  
-  // Toggle the CSV state each time this function is called
-  LeftDoinkerV = LeftDoinkerV * -1;
 
-  // If LeftDoinkerV is 1, activate the color sorter
-  if (LeftDoinkerV == 1){
-    LeftDoinker.set_value(1); // Set the Left Doinker to its active position
-  }
-
-  // If LeftDoinkerV is -1, deactivate the color sorter
-  else if (LeftDoinkerV == -1){
-    LeftDoinker.set_value(0); // Set the Left Doinker to its inactive position
-  }
-}
 
 //                                //
 //                                //
@@ -460,6 +444,47 @@ void Arm_Set_Toggle(){
 void Arm_Out(){
   Arm.move_absolute(2500 ,127);
 }
+
+bool Arm_DR_bool = false;
+bool Arm_Score_bool = false;
+void Arm_Descore_Reset(){
+  Arm_DR_bool = !Arm_DR_bool;
+  if(Arm_DR_bool == true){
+    Arm.move_absolute(0, 127);
+    Arm_Score_bool = false;
+  }
+  else{
+    Arm.move_absolute(1100, 127);
+  }
+
+}
+
+void Arm_score(){
+  Arm_Score_bool = !Arm_Score_bool;
+
+  if(Arm_Score_bool == true){
+    Arm.move_absolute(180, 127);
+    Arm_DR_bool=false;
+  }
+  else{
+    IntakeSecond.move(-20);
+   pros::delay(50);
+   IntakeSecond.move(0);
+    Arm.move_absolute(1200, 127);
+  }
+}
+
+bool Arm_PS_Bool = false;
+void Arm_past_score(){
+ Arm_PS_Bool = !Arm_PS_Bool;
+ if(Arm_PS_Bool == true){
+  Arm.move_absolute(1420, 127);
+ }
+ else{
+  Arm.move_absolute(1820, 127);
+ }
+}
+
 
 void Arm_Toggle(){
   ArmV = ArmV +1;
@@ -552,10 +577,20 @@ void BlueColorSensor_task(){
           Intakefirst.move(-127); // Reverses inatke
           IntakeSecond.move(-127); // Reverses intake 
           pros::delay(150); // Delay for 300 ms
+          
       }
       else{
         Intakefirst.move(127);
         IntakeSecond.move(127);
+        // Testing 
+        if (Intakefirst.get_actual_velocity() == 0) {
+                // Reverse the intake for 200 ms
+                Intakefirst.move(-127);
+                IntakeSecond.move(-127);
+                pros::delay(220);
+                // Resume normal intake operation
+                Intakefirst.move(127);
+            }
       }
     }
     else if (Test ==2){
@@ -720,15 +755,15 @@ void Anti_Jam(){
   }
 }
 
-// void Blue_v_Red(){
-//   if(Mode == true){ // Blue side
-//     Blue_Mode.notify();
-//     Red_Mode.notify();
-//   }
-//   else if (Mode == false){ //Red Side
-//     Blue_Mode.notify();
-//     Red_Mode.notify();
-//   }
-
-//   pros::delay(20);
-// }
+void Task_Creation_Toggle(){
+  bool Mode = false;
+  Mode = !Mode;
+  if(Mode == true){
+    Blue_Mode.remove();
+    Red_Mode.create(RedColorSensor_Task);
+  }
+  else{
+    Red_Mode.remove();
+    Blue_Mode.create(BlueColorSensor_task);
+  }
+}

@@ -17,18 +17,17 @@ inline pros::Motor Left_Back(-9);
 inline pros::Motor Right_Front(13);
 inline pros::Motor Right_Middle(17);
 inline pros::Motor Right_Back(19);
-inline pros::Motor Intakefirst(-15);   
-inline pros::Motor IntakeSecond(-10);
-inline pros::Motor Arm(-6);
+inline pros::Motor Intakefirst(10);   
+inline pros::Motor IntakeSecond(-1);
+inline pros::Motor Arm(-5);
 
 
 // Pneumatics
 
-inline pros::adi::DigitalOut Clamp ('C',false);
-inline pros::adi::DigitalOut Intake_P ('D',false);
-inline pros::adi::DigitalOut PTO ('B',false);
-inline pros::adi::DigitalOut LeftDoinker('H',false);
-inline pros::adi::DigitalOut RightDoinker('F',false);
+inline pros::adi::DigitalOut Clamp ('D',false);
+inline pros::adi::DigitalOut Intake_P ('H',false);
+inline pros::adi::DigitalOut PTO ('G',true);
+inline pros::adi::DigitalOut RightDoinker('C',true);
 
 
 // Sensors

@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "REDDDDDDDDD",
+    "project_name": "Reddd",
     "target": "v5",
     "templates": {
       "EZ-Template": {
@@ -421,7 +421,7 @@
       }
     },
     "upload_options": {
-      "description": "RED",
+      "description": "REDDDDDDDD",
       "after": "run",
       "icon": "pizza",
       "slot": 2
