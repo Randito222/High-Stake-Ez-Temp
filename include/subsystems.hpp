@@ -26,17 +26,18 @@ inline pros::Motor Arm(-5);
 
 inline pros::adi::DigitalOut Clamp ('D',false);
 inline pros::adi::DigitalOut Intake_P ('H',false);
-inline pros::adi::DigitalOut PTO ('G',true);
-inline pros::adi::DigitalOut RightDoinker('C',true);
+inline pros::adi::DigitalOut PTO ('C',false);
+inline pros::adi::DigitalOut RightDoinker('E',false);
 
 
 // Sensors
 
 inline pros::IMU gyro(12);
 inline pros::Optical OP(8);
-//inline pros::adi::DigitalIn LimitSwitch1 ('G');
-inline pros::adi::DigitalIn LimitSwitch2 ('E');
+inline pros::adi::DigitalIn LimitSwitch1 ('G');
+inline pros::adi::DigitalIn LimitSwitch2 ('B');
 inline pros::ADIAnalogIn LineTrack('A');
-inline pros::ADIAnalogIn RingStopper('G');
-inline pros::Distance Distance_S1(14);
-inline pros::Distance Disntance_S2(4);
+//inline pros::ADIAnalogIn RingStopper('G');
+inline pros::Distance Distance_S1(16);
+inline pros::Distance Disntance_S2(20);
+inline pros::ADIDigitalIn LBReset({14,'a'});

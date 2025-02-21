@@ -445,35 +445,6 @@ void Arm_Out(){
   Arm.move_absolute(2500 ,127);
 }
 
-bool Arm_DR_bool = false;
-bool Arm_Score_bool = false;
-void Arm_Descore_Reset(){
-  Arm_DR_bool = !Arm_DR_bool;
-  if(Arm_DR_bool == true){
-    Arm.move_absolute(0, 127);
-    Arm_Score_bool = false;
-  }
-  else{
-    Arm.move_absolute(1100, 127);
-  }
-
-}
-
-void Arm_score(){
-  Arm_Score_bool = !Arm_Score_bool;
-
-  if(Arm_Score_bool == true){
-    Arm.move_absolute(180, 127);
-    Arm_DR_bool=false;
-  }
-  else{
-    IntakeSecond.move(-20);
-   pros::delay(50);
-   IntakeSecond.move(0);
-    Arm.move_absolute(1200, 127);
-  }
-}
-
 bool Arm_PS_Bool = false;
 void Arm_past_score(){
  Arm_PS_Bool = !Arm_PS_Bool;
@@ -484,6 +455,38 @@ void Arm_past_score(){
   Arm.move_absolute(1820, 127);
  }
 }
+
+bool Arm_DR_bool = false;
+bool Arm_Score_bool = false;
+void Arm_Descore_Reset(){
+  //Arm_PS_Bool = false;
+  Arm_DR_bool = !Arm_DR_bool;
+  if(Arm_DR_bool == true){
+    Arm.move_absolute(0,127);
+    Arm_Score_bool = false;
+  }
+  else{
+    Arm.move_absolute(1100, 127);
+  }
+}
+
+void Arm_score(){
+  Arm_PS_Bool = false;
+  Arm_Score_bool = !Arm_Score_bool;
+
+  if(Arm_Score_bool == true){
+    Arm.move_absolute(200, 127);
+    Arm_DR_bool=false;
+  }
+  else{
+    IntakeSecond.move(-20);
+   pros::delay(50);
+   IntakeSecond.move(0);
+    Arm.move_absolute(1200, 127);
+  }
+}
+
+
 
 
 void Arm_Toggle(){
@@ -619,6 +622,7 @@ bool pistonState = false; // Track piston state for toggling
 
 // ClampOut: A function that controls a clamp mechanism based on limit switch inputs, 
 //           controller button presses, and the AutoClampBool mode.
+int countign = 0;
 void ClampOut() {
   
    while (true) {
@@ -627,21 +631,25 @@ void ClampOut() {
         // // bool limit2Pressed = LimitSwitch2.get_value(); // Check if LimitSwitch2 is pressed
         bool buttonBPressed = master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B); // Check if Button B is pressed
 
-        if (Distance_S1.get_distance() < 130 && Disntance_S2.get_distance() < 130) {
+        if (Distance_S1.get_distance() < 170 && Disntance_S2.get_distance() < 170) {
             // If both limit switches are pressed, activate the clamp
             pistonState = true;   // Update the piston state as active
             Clamp.set_value(pistonState); // Extend the piston
 
             if (buttonBPressed) {
               // If Button B is pressed while both switches are active, deactivate the piston
-              pistonState = false;    // Update the piston state as inactive
-              Clamp.set_value(pistonState); // Retract the piston
+              // pistonState = false;    // Update the piston state as inactive
+              // Clamp.set_value(pistonState); // Retract the piston
               while(true){
-               if(Distance_S1.get_distance() < 120 || Disntance_S2.get_distance() < 120){
+                countign++;
+                master.print(0, 0, "Counting: %d", countign);
+               if(Distance_S1.get_distance() < 170 || Disntance_S2.get_distance() < 170){
                 pistonState = false;
                 Clamp.set_value(pistonState);
                }
-               else if(!(Distance_S1.get_distance() < 120 || Disntance_S2.get_distance() < 120)){
+               else if(!(Distance_S1.get_distance() < 170 || Disntance_S2.get_distance() < 170)){
+                pistonState = false;
+                Clamp.set_value(pistonState);
                 break;
                }
                pros::delay(20);
@@ -654,7 +662,7 @@ void ClampOut() {
                 // If neither limit switch is pressed, toggle the piston state
                 pistonState = !pistonState; // Toggle the piston state
                 Clamp.set_value(pistonState); // Set the piston based on the new state
-                pros::delay(300);       // Short delay to prevent rapid state changes
+                pros::delay(20);       // Short delay to prevent rapid state changes
             // } else if (Distance_S1.get_distance() < 80 && Disntance_S2.get_distance() < 80) {
             //     // If either limit switch is pressed, deactivate the piston
             //     Clamp.set_value(false); // Retract the piston
@@ -733,19 +741,24 @@ void Anti_Jam(){
             pros::delay(50); // delay to prevent reversing when it starts
 
             // Check if the voltage of the intake equals 0
-            if (Intakefirst.get_actual_velocity() == 0) {
+            if (IntakeSecond.get_actual_velocity() == 0) {
                 // Reverse the intake for 200 ms
-                Intakefirst.move(-127);
                 IntakeSecond.move(-127);
                 pros::delay(220);
                 // Resume normal intake operation
-                Intakefirst.move(127);
+                IntakeSecond.move(127);
             }
         }
         else if(Test == 2){ // if intake is on reverse
           // Move the intake in reverse
           Intakefirst.move(-127);
+          IntakeSecond.move(-127);
         } 
+        else if (Test==3) {
+          Intakefirst.move(127);
+          IntakeSecond.move(0);
+        
+        }
         else if(Test == 0) { // if intake is off
             // Stop the intake
             Intakefirst.move(0);
