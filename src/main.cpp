@@ -85,13 +85,16 @@ void initialize() {
       //Auton("Red Single Goal\n\n Gets one goal and fills it up.", Red_Single_Goal),
       // Auton("Blue Rush \n\ngoes for middle goal.", Blue_Rush),
       //Auton("Red Rush \n\ngoes for middle goal.", Red_Rush),
-      Auton("Sig Negative Red\n\n scores on alliance stake and scores 4 more on the neg goal.",SigAutoRN),
-      Auton("Sig Negative Blue\n\n scores on alliance stake and scores 4 more on the neg goal.",SigAutoBN),
-      Auton("Sig Positive Red\n\n scores on alliance stake and scores 2 more on the pos goal.",SigAutoRP),
-      Auton("Sig Positive Blue\n\n scores on alliance stake and scores 2 more on the pos goal.",SigAutoBP),
+      Auton("Red Negative\n\n scores on alliance stake and scores 4 more on the neg goal.",SigAutoRN),
+      Auton("Blue Negative\n\n scores on alliance stake and scores 4 more on the neg goal.",SigAutoBN),
+      Auton("Red Positive\n\n scores on alliance stake and scores 2 more on the pos goal.",SigAutoRP),
+      Auton("Blue Positive\n\n scores on alliance stake and scores 2 more on the pos goal.",SigAutoBP),
       Auton("Sig AWP Blue\n\n Scores on alliance stake, two more on neg goal, 1 more on pos goal", SigAWPB),
       Auton("Sig AWP Red \n\n Scores on alliance stake, two more on neg goal, 1 more on pos goal", SigAWPR),
-      Auton("Elim Auto \n\n Gets thrid goal and puts on ring on it.", GoalRush),
+      Auton("Goal Rush Elim Auto \n\n Gets thrid goal and puts on ring on it, then gets second goal and puts ring on it.", GoalRush),
+      //Auton("5 Ring Goal \n\n Gets 5 rings and puts them on the goal and brings it to positive corner.", FiveRingGoal),
+      Auton("Elim Blue Positive \n\n Scored on alliance stake, gets second goal and puts 3 rings and clean corner", ElimBluePos),
+      //Auton("Elim Blue Negative \n\n Scored on alliance stake, gets second goal and puts 3 rings and clean corner", ElimBlueNeg),
       Auton("Skills", SkillsV2),
   });
 
@@ -263,10 +266,17 @@ void ez_template_extras() {
 void opcontrol() {
   // This is preference to what you like to drive on
   chassis.drive_brake_set(MOTOR_BRAKE_COAST);
+  Blue_Mode.resume();
+  Red_Mode.suspend();
+  // Blue_Mode.suspend();
+  // Red_Mode.resume();
+  AutonAutoClamp.suspend();
+  IntakeC.suspend();
 
   while (true) {
     // Gives you some extras to make EZ-Template ezier
     ez_template_extras();
+    //Arm.tare_position();
 
     chassis.opcontrol_tank();  // Tank controls
 
@@ -278,13 +288,13 @@ void opcontrol() {
       //  Intakefirst.move(127);
       //  IntakeSecond.move(127);
       Test = 1;
-      Intakefirst.move(127);
-      IntakeSecond.move(127);
+      // Intakefirst.move(127);
+      // IntakeSecond.move(127);
       }
     else if(master.get_digital(DIGITAL_R1)){ // When holding button R1
       Test = 2;
-      Intakefirst.move(-127);
-      IntakeSecond.move(-127);
+      // Intakefirst.move(-127);
+      // IntakeSecond.move(-127);
       }
       // else if(master.get_digital(DIGITAL_DOWN)){ // When holding button down
       //   Intake_P.set_value(1); // Brings the intake up
@@ -293,8 +303,8 @@ void opcontrol() {
       //   Intakefirst.move(0);
       //   IntakeSecond.move(0);
       Test = 0;
-      Intakefirst.move(0);
-      IntakeSecond.move(0);
+      // Intakefirst.move(0);
+      // IntakeSecond.move(0);
       // Intake_P.set_value(0);
       } 
 

@@ -36,6 +36,8 @@ extern void SigAWPR();
 extern void SigAWPB();
 extern void SigAutoRP();
 extern void SigAutoBP();
+extern void ElimBluePos();
+extern void ElimBlueNeg();
 extern void GoalRush();
 extern void Skills();
 extern void SkillsV2();

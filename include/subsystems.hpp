@@ -33,11 +33,11 @@ inline pros::adi::DigitalOut RightDoinker('E',false);
 // Sensors
 
 inline pros::IMU gyro(12);
-inline pros::Optical OP(8);
+inline pros::Optical OP(3);
 inline pros::adi::DigitalIn LimitSwitch1 ('G');
 inline pros::adi::DigitalIn LimitSwitch2 ('B');
 inline pros::ADIAnalogIn LineTrack('A');
 //inline pros::ADIAnalogIn RingStopper('G');
-inline pros::Distance Distance_S1(16);
+inline pros::Distance Distance_S1(13);
 inline pros::Distance Disntance_S2(20);
-inline pros::ADIDigitalIn LBReset({14,'a'});
+inline pros::adi::DigitalIn LBReset({14,'A'});
