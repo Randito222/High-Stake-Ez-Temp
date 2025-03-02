@@ -9,6 +9,7 @@
 #include "pros/device.hpp"
 #include "pros/misc.h"
 #include "pros/misc.hpp"
+#include "pros/motors.h"
 #include "pros/rtos.hpp"
 #include "pros/screen.hpp"
 #include "subsystems.hpp"
@@ -61,19 +62,19 @@ void ClearEncorders(){
 }
 
 void StopBase(){
-    Left_Front.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
-    Left_Middle.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
-    Left_Back.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
-    Right_Front.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
-    Right_Middle.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
-    Right_Back.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
-    // Sets what type of brake mode the motors should have
-    Left_Front.brake();
-    Left_Middle.brake();
-    Left_Back.brake();
-    Right_Front.brake();
-    Right_Middle.brake();
-    Right_Back.brake();
+    // Left_Front.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+    // Left_Middle.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+    // Left_Back.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+    // Right_Front.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+    // Right_Middle.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+    // Right_Back.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+    // // Sets what type of brake mode the motors should have
+    // Left_Front.brake();
+    // Left_Middle.brake();
+    // Left_Back.brake();
+    // Right_Front.brake();
+    // Right_Middle.brake();
+    // Right_Back.brake();
     // Makes the motors stop
 }
 
@@ -463,13 +464,23 @@ void Arm_Descore_Reset(){
   Arm_DR_bool = !Arm_DR_bool; //minor code changes 
   if(Arm_DR_bool == true){
     Arm_Score_bool = false;
-    // while(!(LBReset.get_value() == 1)){
-    //   Arm.move(-127);
-    //   pros::delay(20);
-    // }
-    // Arm.tare_position();
-    // Arm.move(0);
-    Arm.move_absolute(0,600);
+    int Reset = 0;
+
+    while(Reset==0){
+      if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)){
+        Reset = 1;
+        Arm.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+        Arm.move(0);
+      }
+      Arm.move(-50);
+      if(LBReset.get_value() == 1){
+        Arm.move(0);
+        pros::delay(200);
+        Arm.tare_position();
+        Reset = 1;
+      }
+    }
+    //Arm.move_absolute(0,600);
   }
   if(Arm_DR_bool == false){
     Arm.move_absolute(1100, 600);
@@ -481,7 +492,7 @@ void Arm_score(){
   Arm_Score_bool = !Arm_Score_bool;
 
   if(Arm_Score_bool == true){
-    Arm.move_absolute(180, 600);
+    Arm.move_absolute(185, 600);
     Arm_DR_bool=false;
   }
   else{
@@ -518,6 +529,14 @@ void Arm_Toggle(){
   }
 }
 
+
+void Arm_emergency_reset(){
+  Arm.move(-127);
+  if(LBReset.get_value() == 0){
+    Arm.tare_position();
+    Arm.move(0);
+  }
+}
 //                                //
 //                                //
 //              Tasks             //
@@ -532,7 +551,7 @@ double Get_Color(){
 // RedColorSensor_Task: A function that continuously monitors a color sensor to control a color sorter mechanism
 // This function runs in an infinite loop, checking for red and blue hues and activating or deactivating the sorter based on the detected color.
 void RedColorSensor_Task(){
-  int STOPPPP = 0;
+  
    
   while (true) {
 
@@ -569,7 +588,7 @@ void RedColorSensor_Task(){
       IntakeSecond.move(-127);
     }
     else if(Test == 3){
-      IntakeSecond.move(127);
+      Intakefirst.move(127);
     }
     else{
       Intakefirst.move(0);
@@ -591,31 +610,49 @@ void BlueColorSensor_task(){
   while (true) {
 
     if (Test == 1){
-      int hue = OP.get_hue();
-
-            // Check if the hue corresponds to red (typical red hue is around 0-30 degrees)
-      if (hue < 25) {
+  
+      if (AUTON == false){
+        int hue = OP.get_hue();
+        // Check if the hue corresponds to red (typical red hue is around 0-30 degrees)
+        if (hue < 25) {
           // Reverses intake for a bit
           pros::delay(180); // Delays for 120 ms
           IntakeSecond.move(-127); // Reverses inatke
           pros::delay(150); // Delay for 300 ms
           
-      }
-      else{
+        }
+        else{
         Intakefirst.move(127);
         IntakeSecond.move(127);
-        // pros::delay(50);
-        // // Testing 
-        // if (IntakeSecond.get_actual_velocity() == 0) {
-        //         // Reverse the intake for 200 ms
-        //         //Intakefirst.move(-127);
-        //         IntakeSecond.move(-127);
-        //         pros::delay(220);
-        //         // Resume normal intake operation
-        //         IntakeSecond.move(127);
-        //     }
+        }
       }
-    }
+      if (AUTON == true){
+        int hue = OP.get_hue();
+        if (hue < 25) {
+          // Reverses intake for a bit
+          pros::delay(180); // Delays for 120 ms
+          IntakeSecond.move(-127); // Reverses inatke
+          pros::delay(150); // Delay for 300 ms
+          
+        }
+        pros::delay(50);
+        // Testing 
+        if (IntakeSecond.get_actual_velocity() == 0) {
+                // Reverse the intake for 200 ms
+                //Intakefirst.move(-127);
+                IntakeSecond.move(-127);
+                pros::delay(220);
+                // Resume normal intake operation
+                IntakeSecond.move(127);
+            }
+        else{
+        Intakefirst.move(127);
+        IntakeSecond.move(127);
+        }
+      
+        
+      }
+     }
     else if (Test ==2){
       Intakefirst.move(-127); // Spin Inakte first motor to 127 voltages (forwards)
       IntakeSecond.move(-127);
@@ -634,6 +671,7 @@ void BlueColorSensor_task(){
 
    }
 }
+
 
 // Boolean variable to control the automatic clamp mode; initially set to true
 bool AutoClampBool = true;
@@ -737,15 +775,15 @@ void Task_Toggle() {
   
   // If TaskV is 1, suspend the Blue_Mode task
   if (TaskV == 1) {
-    //Red_Mode.suspend(); // (Commented out) This line would suspend Red_Mode if uncommented
-    Blue_Mode.suspend();   // Suspend the Blue_Mode task
+    Red_Mode.suspend(); // (Commented out) This line would suspend Red_Mode if uncommented
+    //Blue_Mode.suspend();   // Suspend the Blue_Mode task
     IntakeC.resume(); // Resume the IntakeC task
   }
   
   // If TaskV is -1, resume the Blue_Mode task
   else if (TaskV == -1) {
-    //Red_Mode.resume(); // (Commented out) This line would resume Red_Mode if uncommented
-    Blue_Mode.resume();    // Resume the Blue_Mode task
+    Red_Mode.resume(); // (Commented out) This line would resume Red_Mode if uncommented
+    //Blue_Mode.resume();    // Resume the Blue_Mode task
     IntakeC.suspend(); // Resume the IntakeC task
   }
 }
@@ -755,34 +793,30 @@ void Anti_Jam(){
  while (true) {
         // Check if the R2 button is pressed
         if (Test == 1) { // if intake is on
-            // Move the intake forward
-            Intakefirst.move(127);
-            IntakeSecond.move(127);
-            pros::delay(50); // delay to prevent reversing when it starts
 
             // Check if the voltage of the intake equals 0
-            if (IntakeSecond.get_actual_velocity() == 0) {
-                // Reverse the intake for 200 ms
-                IntakeSecond.move(-127);
-                pros::delay(220);
-                // Resume normal intake operation
-                IntakeSecond.move(127);
-            }
+          if (IntakeSecond.get_actual_velocity() == 0) {
+              // Reverse the intake for 200 ms
+              IntakeSecond.move(-127);
+              pros::delay(220);
+              // Resume normal intake operation
+              IntakeSecond.move(127);
+          }
         }
-        else if(Test == 2){ // if intake is on reverse
-          // Move the intake in reverse
-          Intakefirst.move(-127);
-          IntakeSecond.move(-127);
-        } 
-        else if (Test==3) {
-          Intakefirst.move(127);
-          IntakeSecond.move(0);
+        // else if(Test == 2){ // if intake is on reverse
+        //   // Move the intake in reverse
+        //   Intakefirst.move(-127);
+        //   IntakeSecond.move(-127);
+        // } 
+        // else if (Test==3) {
+        //   Intakefirst.move(127);
+        //   IntakeSecond.move(0);
         
-        }
-        else if(Test == 0) { // if intake is off
-            // Stop the intake
-            Intakefirst.move(0);
-        }
+        // }
+        // else if(Test == 0) { // if intake is off
+        //     // Stop the intake
+        //     Intakefirst.move(0);
+        // }
 
         pros::delay(20); // Delay to prevent excessive CPU usage
   }

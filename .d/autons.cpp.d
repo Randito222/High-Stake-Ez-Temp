@@ -135,8 +135,8 @@ bin/autons.cpp.o: src/autons.cpp include/autons.hpp \
  include/okapi/api/units/QLength.hpp include/okapi/api/units/QTime.hpp \
  include/EZ-Template/slew.hpp include/EZ-Template/tracking_wheel.hpp \
  include/pros/adi.hpp include/pros/rotation.hpp \
- include/pros/motor_group.hpp include/main.h include/api.h \
- include/EZ-Template/api.hpp include/EZ-Template/auton.hpp \
+ include/pros/motor_group.hpp include/EZ-Template/auton.hpp \
+ include/main.h include/api.h include/EZ-Template/api.hpp \
  include/EZ-Template/auton_selector.hpp include/EZ-Template/piston.hpp \
  include/EZ-Template/sdcard.hpp include/subsystems.hpp \
  include/Functions.hpp include/okapi/api.hpp \
@@ -488,10 +488,10 @@ include/EZ-Template/tracking_wheel.hpp:
 include/pros/adi.hpp:
 include/pros/rotation.hpp:
 include/pros/motor_group.hpp:
+include/EZ-Template/auton.hpp:
 include/main.h:
 include/api.h:
 include/EZ-Template/api.hpp:
-include/EZ-Template/auton.hpp:
 include/EZ-Template/auton_selector.hpp:
 include/EZ-Template/piston.hpp:
 include/EZ-Template/sdcard.hpp:

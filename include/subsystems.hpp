@@ -11,12 +11,12 @@
 
 // Motors
 
-inline pros::Motor Left_Front(-7);
-inline pros::Motor Left_Middle(-8);
-inline pros::Motor Left_Back(-9);
-inline pros::Motor Right_Front(13);
-inline pros::Motor Right_Middle(17);
-inline pros::Motor Right_Back(19);
+inline pros::Motor Left_Front(-17);
+inline pros::Motor Left_Middle(-18);
+inline pros::Motor Left_Back(-19);
+inline pros::Motor Right_Front(9);
+inline pros::Motor Right_Middle(7);
+inline pros::Motor Right_Back(8);
 inline pros::Motor Intakefirst(10);   
 inline pros::Motor IntakeSecond(-1);
 inline pros::Motor Arm(-5);

@@ -1,5 +1,8 @@
 #include "main.h"
+#include "EZ-Template/util.hpp"
+#include "autons.hpp"
 #include "pros/misc.h"
+#include "pros/motors.h"
 #include "subsystems.hpp"
 
 /////
@@ -35,6 +38,12 @@ void initialize() {
   // Print our branding over your terminal :D
   ez::ez_template_print();
   OP.set_led_pwm(100);
+  // Right_Back.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+  // Right_Middle.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+  // Right_Front.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+  // Left_Back.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+  // Left_Middle.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+  // Left_Front.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
 
   pros::delay(500);  // Stop the user from doing anything while legacy ports configure
 
@@ -94,8 +103,8 @@ void initialize() {
       Auton("Goal Rush Elim Auto \n\n Gets thrid goal and puts on ring on it, then gets second goal and puts ring on it.", GoalRush),
       //Auton("5 Ring Goal \n\n Gets 5 rings and puts them on the goal and brings it to positive corner.", FiveRingGoal),
       Auton("Elim Blue Positive \n\n Scored on alliance stake, gets second goal and puts 3 rings and clean corner", ElimBluePos),
-      //Auton("Elim Blue Negative \n\n Scored on alliance stake, gets second goal and puts 3 rings and clean corner", ElimBlueNeg),
-      Auton("Skills", SkillsV2),
+      Auton("Elim Blue Negative \n\n Scored on alliance stake, gets second goal and puts 3 rings and clean corner", ElimBlueNeg),
+      Auton("Skills", Skills),
   });
 
   // Initialize chassis and auton selector
@@ -266,19 +275,28 @@ void ez_template_extras() {
 void opcontrol() {
   // This is preference to what you like to drive on
   chassis.drive_brake_set(MOTOR_BRAKE_COAST);
-  Blue_Mode.resume();
-  Red_Mode.suspend();
-  // Blue_Mode.suspend();
-  // Red_Mode.resume();
+  // Blue_Mode.resume();
+  // Red_Mode.suspend();
+  Blue_Mode.suspend();
+  Red_Mode.resume();
   AutonAutoClamp.suspend();
   IntakeC.suspend();
+  Test = 0;
+  AUTON = false;
 
   while (true) {
+  
     // Gives you some extras to make EZ-Template ezier
     ez_template_extras();
     //Arm.tare_position();
 
-    chassis.opcontrol_tank();  // Tank controls
+    //chassis.opcontrol_tank();  // Tank controls
+    Left_Front.move(master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y));
+    Left_Middle.move(master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y));
+    Left_Back.move(master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y));
+    Right_Front.move(master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y));
+    Right_Middle.move(master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y));
+    Right_Back.move(master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y));
 
     // . . .
     // Put more user control code here!
