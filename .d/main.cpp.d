@@ -129,16 +129,24 @@ bin/main.cpp.o: src/main.cpp include/main.h include/api.h \
  include/pros/motors.hpp include/pros/optical.hpp include/pros/optical.h \
  include/pros/rotation.hpp include/pros/rotation.h include/pros/rtos.hpp \
  include/pros/screen.hpp include/pros/screen.h include/pros/vision.hpp \
- include/pros/vision.h include/okapi/api.hpp \
+ include/pros/vision.h include/EZ-Template/api.hpp \
+ include/EZ-Template/PID.hpp include/EZ-Template/util.hpp include/api.h \
+ include/okapi/api/units/QAngle.hpp include/okapi/api/units/RQuantity.hpp \
+ include/okapi/api/units/QLength.hpp include/okapi/api/units/QTime.hpp \
+ include/EZ-Template/auton.hpp include/EZ-Template/auton_selector.hpp \
+ include/EZ-Template/drive/drive.hpp include/EZ-Template/slew.hpp \
+ include/EZ-Template/tracking_wheel.hpp include/pros/adi.hpp \
+ include/pros/rotation.hpp include/pros/motor_group.hpp \
+ include/EZ-Template/piston.hpp include/EZ-Template/sdcard.hpp \
+ include/autons.hpp include/subsystems.hpp include/Functions.hpp \
+ include/okapi/api.hpp \
  include/okapi/api/chassis/controller/chassisControllerIntegrated.hpp \
  include/okapi/api/chassis/controller/chassisController.hpp \
  include/okapi/api/chassis/controller/chassisScales.hpp \
- include/okapi/api/units/QAngle.hpp include/okapi/api/units/RQuantity.hpp \
- include/okapi/api/units/QLength.hpp include/okapi/api/util/logging.hpp \
- include/okapi/api/coreProsAPI.hpp include/api.h include/pros/apix.h \
- include/pros/device.h include/pros/serial.h include/pros/serial.hpp \
- include/okapi/api/util/abstractTimer.hpp \
- include/okapi/api/units/QFrequency.hpp include/okapi/api/units/QTime.hpp \
+ include/okapi/api/util/logging.hpp include/okapi/api/coreProsAPI.hpp \
+ include/pros/apix.h include/pros/device.h include/pros/serial.h \
+ include/pros/serial.hpp include/okapi/api/util/abstractTimer.hpp \
+ include/okapi/api/units/QFrequency.hpp \
  include/okapi/api/util/mathUtil.hpp \
  include/okapi/api/device/motor/abstractMotor.hpp \
  include/okapi/api/control/controllerOutput.hpp \
@@ -253,12 +261,7 @@ bin/main.cpp.o: src/main.cpp include/main.h include/api.h \
  include/okapi/api/units/QPressure.hpp \
  include/okapi/api/units/QTorque.hpp include/okapi/api/units/QVolume.hpp \
  include/okapi/impl/util/configurableTimeUtilFactory.hpp \
- include/okapi/impl/util/rate.hpp include/EZ-Template/api.hpp \
- include/EZ-Template/PID.hpp include/EZ-Template/util.hpp \
- include/EZ-Template/auton.hpp include/EZ-Template/auton_selector.hpp \
- include/EZ-Template/drive/drive.hpp include/EZ-Template/slew.hpp \
- include/EZ-Template/piston.hpp include/EZ-Template/sdcard.hpp \
- include/autons.hpp include/subsystems.hpp include/Functions.hpp
+ include/okapi/impl/util/rate.hpp
 include/main.h:
 include/api.h:
 include/pros/adi.h:
@@ -473,23 +476,39 @@ include/pros/screen.hpp:
 include/pros/screen.h:
 include/pros/vision.hpp:
 include/pros/vision.h:
+include/EZ-Template/api.hpp:
+include/EZ-Template/PID.hpp:
+include/EZ-Template/util.hpp:
+include/api.h:
+include/okapi/api/units/QAngle.hpp:
+include/okapi/api/units/RQuantity.hpp:
+include/okapi/api/units/QLength.hpp:
+include/okapi/api/units/QTime.hpp:
+include/EZ-Template/auton.hpp:
+include/EZ-Template/auton_selector.hpp:
+include/EZ-Template/drive/drive.hpp:
+include/EZ-Template/slew.hpp:
+include/EZ-Template/tracking_wheel.hpp:
+include/pros/adi.hpp:
+include/pros/rotation.hpp:
+include/pros/motor_group.hpp:
+include/EZ-Template/piston.hpp:
+include/EZ-Template/sdcard.hpp:
+include/autons.hpp:
+include/subsystems.hpp:
+include/Functions.hpp:
 include/okapi/api.hpp:
 include/okapi/api/chassis/controller/chassisControllerIntegrated.hpp:
 include/okapi/api/chassis/controller/chassisController.hpp:
 include/okapi/api/chassis/controller/chassisScales.hpp:
-include/okapi/api/units/QAngle.hpp:
-include/okapi/api/units/RQuantity.hpp:
-include/okapi/api/units/QLength.hpp:
 include/okapi/api/util/logging.hpp:
 include/okapi/api/coreProsAPI.hpp:
-include/api.h:
 include/pros/apix.h:
 include/pros/device.h:
 include/pros/serial.h:
 include/pros/serial.hpp:
 include/okapi/api/util/abstractTimer.hpp:
 include/okapi/api/units/QFrequency.hpp:
-include/okapi/api/units/QTime.hpp:
 include/okapi/api/util/mathUtil.hpp:
 include/okapi/api/device/motor/abstractMotor.hpp:
 include/okapi/api/control/controllerOutput.hpp:
@@ -609,15 +628,3 @@ include/okapi/api/units/QTorque.hpp:
 include/okapi/api/units/QVolume.hpp:
 include/okapi/impl/util/configurableTimeUtilFactory.hpp:
 include/okapi/impl/util/rate.hpp:
-include/EZ-Template/api.hpp:
-include/EZ-Template/PID.hpp:
-include/EZ-Template/util.hpp:
-include/EZ-Template/auton.hpp:
-include/EZ-Template/auton_selector.hpp:
-include/EZ-Template/drive/drive.hpp:
-include/EZ-Template/slew.hpp:
-include/EZ-Template/piston.hpp:
-include/EZ-Template/sdcard.hpp:
-include/autons.hpp:
-include/subsystems.hpp:
-include/Functions.hpp:

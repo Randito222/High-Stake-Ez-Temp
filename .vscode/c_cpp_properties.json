@@ -4,10 +4,7 @@
       "name": "PROS Project",
       "includePath": [
         "${workspaceFolder}/**",
-        "c:\\Users\\randy\\OneDrive\\Documents\\PID Test\\include",
-        "c:\\Users\\randy\\OneDrive\\Programs\\PID Test\\include",
-        "c:\\Users\\randy\\OneDrive\\Programs\\Week\\Week 1\\PID Test\\include",
-        "c:\\Users\\randy\\OneDrive\\Programs\\Week\\week 6\\PID Test\\include",
+        "c:\\Users\\randy\\OneDrive\\Programs\\Updated Code\\include",
         "c:\\Users\\randy\\OneDrive\\Programs\\Week\\week7\\PID Test\\include"
       ],
       "defines": [
