@@ -466,21 +466,21 @@ void Arm_Descore_Reset(){
     Arm_Score_bool = false;
     int Reset = 0;
 
-    while(Reset==0){
-      if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)){
-        Reset = 1;
-        Arm.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-        Arm.move(0);
-      }
-      Arm.move(-50);
-      if(LBReset.get_value() == 1){
-        Arm.move(0);
-        pros::delay(200);
-        Arm.tare_position();
-        Reset = 1;
-      }
-    }
-    //Arm.move_absolute(0,600);
+    // while(Reset==0){
+    // //   if(master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)){
+    // //     Reset = 1;
+    // //     Arm.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+    // //     Arm.move(0);
+    // //   }
+    // //   Arm.move(-50);
+    // //   if(LBReset.get_value() == 1){
+    // //     Arm.move(0);
+    // //     pros::delay(200);
+    // //     Arm.tare_position();
+    // //     Reset = 1;
+    // //   }
+    // }
+    Arm.move_absolute(0,600);
   }
   if(Arm_DR_bool == false){
     Arm.move_absolute(1100, 600);
@@ -492,12 +492,12 @@ void Arm_score(){
   Arm_Score_bool = !Arm_Score_bool;
 
   if(Arm_Score_bool == true){
-    Arm.move_absolute(185, 600);
+    Arm.move_absolute(180, 600);
     Arm_DR_bool=false;
   }
   else{
     IntakeSecond.move(-20);
-   pros::delay(50);
+   pros::delay(75);
    IntakeSecond.move(0);
     Arm.move_absolute(1200, 600);
   }
@@ -556,32 +556,45 @@ void RedColorSensor_Task(){
   while (true) {
 
     if (Test == 1){
-      int hue = OP.get_hue();
 
             // Check if the hue corresponds to red (typical red hue is around 0-30 degrees)
-      if (hue >= 61) {
-          // Reverses intake for a bit
-          pros::delay(180); // Delays for 120 ms
-          IntakeSecond.move(-127); // Reverses inatke
-          pros::delay(150); // Delay for 300 ms
-          Intakefirst.move(127);
-          // if(Distance_S1.get_distance() < 70){
-          //   IntakeSecond.move(0);
-          //   //STOPPPP = 1;
-          //   pros::delay(150);
-          //   IntakeSecond.move(127);
-
-          // }
-      }
-      // else if(STOPPPP == 1){
-      //   IntakeSecond.move(0);
-      //   pros::delay(800);
-      //   STOPPPP = 0;
-      // }
-      else{
-        Intakefirst.move(127);
-        IntakeSecond.move(127);
-      }
+            if (AUTON == false){
+              int hue = OP.get_hue();
+              // Check if the hue corresponds to red (typical red hue is around 0-30 degrees)
+              if (hue > 60) {
+                // Reverses intake for a bit
+                pros::delay(180); // Delays for 120 ms
+                IntakeSecond.move(-127); // Reverses inatke
+                pros::delay(150); // Delay for 300 ms
+                IntakeSecond.move(127); 
+                
+              }
+              else{
+              Intakefirst.move(127);
+              IntakeSecond.move(127);
+              }
+            }
+            if (AUTON == true){
+              int hue = OP.get_hue();
+              if (hue > 55) {
+                // Reverses intake for a bit
+                pros::delay(180); // Delays for 120 ms
+                IntakeSecond.move(-127); // Reverses inatke
+                pros::delay(150); // Delay for 300 ms
+                
+              }              
+              else{
+               Intakefirst.move(127);
+               IntakeSecond.move(127);
+               pros::delay(50);
+               if (IntakeSecond.get_actual_velocity() == 0) {
+                IntakeSecond.move(-127);
+                pros::delay(250);
+                // Resume normal intake operation
+                IntakeSecond.move(127);
+               }
+              }
+            }
     }
     else if (Test ==2){
       Intakefirst.move(-127); // Spin Inakte first motor to 127 voltages (forwards)
@@ -589,6 +602,7 @@ void RedColorSensor_Task(){
     }
     else if(Test == 3){
       Intakefirst.move(127);
+      IntakeSecond.move(0);
     }
     else{
       Intakefirst.move(0);
@@ -614,11 +628,12 @@ void BlueColorSensor_task(){
       if (AUTON == false){
         int hue = OP.get_hue();
         // Check if the hue corresponds to red (typical red hue is around 0-30 degrees)
-        if (hue < 25) {
+        if (hue < 30) {
           // Reverses intake for a bit
           pros::delay(180); // Delays for 120 ms
           IntakeSecond.move(-127); // Reverses inatke
           pros::delay(150); // Delay for 300 ms
+          IntakeSecond.move(127); 
           
         }
         else{
@@ -628,37 +643,33 @@ void BlueColorSensor_task(){
       }
       if (AUTON == true){
         int hue = OP.get_hue();
-        if (hue < 25) {
+        if (hue < 30) {
           // Reverses intake for a bit
           pros::delay(180); // Delays for 120 ms
           IntakeSecond.move(-127); // Reverses inatke
           pros::delay(150); // Delay for 300 ms
           
-        }
-        pros::delay(50);
-        // Testing 
-        if (IntakeSecond.get_actual_velocity() == 0) {
-                // Reverse the intake for 200 ms
-                //Intakefirst.move(-127);
-                IntakeSecond.move(-127);
-                pros::delay(220);
-                // Resume normal intake operation
-                IntakeSecond.move(127);
-            }
+        }              
         else{
-        Intakefirst.move(127);
-        IntakeSecond.move(127);
+         Intakefirst.move(127);
+         IntakeSecond.move(127);
+         pros::delay(50);
+         if (IntakeSecond.get_actual_velocity() == 0) {
+          IntakeSecond.move(-127);
+          pros::delay(250);
+          // Resume normal intake operation
+          IntakeSecond.move(127);
+         }
         }
-      
-        
       }
-     }
+    }
     else if (Test ==2){
       Intakefirst.move(-127); // Spin Inakte first motor to 127 voltages (forwards)
       IntakeSecond.move(-127);
     }
     else if(Test == 3){
       Intakefirst.move(127);
+      IntakeSecond.move(0);
     }
     else{
       Intakefirst.move(0);
