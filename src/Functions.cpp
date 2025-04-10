@@ -450,10 +450,10 @@ bool Arm_PS_Bool = false;
 void Arm_past_score(){
  Arm_PS_Bool = !Arm_PS_Bool;
  if(Arm_PS_Bool == true){
-  Arm.move_absolute(1420, 600);
+  Arm.move_absolute(1320, 600);
  }
  else{
-  Arm.move_absolute(1820, 600);
+  Arm.move_absolute(1720, 600);
  }
 }
 
@@ -483,24 +483,42 @@ void Arm_Descore_Reset(){
     Arm.move_absolute(0,600);
   }
   if(Arm_DR_bool == false){
-    Arm.move_absolute(1100, 600);
+    Arm.move_absolute(1000, 600);
   }
 }
-
+int ArmV2 = 0; // Variable to track the arm position state
 void Arm_score(){
-  Arm_PS_Bool = false;
-  Arm_Score_bool = !Arm_Score_bool;
+  ArmV2 = ArmV2 + 1; // Increment the arm position state
+  if(ArmV2 == 1){
+    Arm.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+    Arm.move(127);
+    pros::delay(140);
+    Arm.move(0);
+  }
+  else if(ArmV2 == 2){
+    Arm.move_absolute(1120, 600); // Move the arm to the second scoring position
+  }
+  else if(ArmV2 == 3){
+    Arm.move_absolute(0, 600); // Move the arm to the third scoring position
+    ArmV2 = 0; // Reset the arm position state
+  }
+  // Arm_PS_Bool = false;
+  // Arm_Score_bool = !Arm_Score_bool;
 
-  if(Arm_Score_bool == true){
-    Arm.move_absolute(180, 600);
-    Arm_DR_bool=false;
-  }
-  else{
-    IntakeSecond.move(-20);
-   pros::delay(75);
-   IntakeSecond.move(0);
-    Arm.move_absolute(1200, 600);
-  }
+  // if(Arm_Score_bool == true){
+  //   Arm.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+  //   Arm.move(127);
+  //   pros::delay(130);
+  //   Arm.move(0);
+  //   Arm_DR_bool=false;
+  // }
+  // else{
+  //   IntakeSecond.move(-127);
+  //  pros::delay(100);
+  //  IntakeSecond.move(0);
+  //   Arm.move_absolute(1100, 600);
+  // }
+ 
 }
 
 
@@ -555,45 +573,65 @@ void RedColorSensor_Task(){
    
   while (true) {
 
+    bool Ring_Detected = false;
     if (Test == 1){
 
             // Check if the hue corresponds to red (typical red hue is around 0-30 degrees)
-            if (AUTON == false){
-              int hue = OP.get_hue();
-              // Check if the hue corresponds to red (typical red hue is around 0-30 degrees)
-              if (hue > 60) {
-                // Reverses intake for a bit
-                pros::delay(180); // Delays for 120 ms
-                IntakeSecond.move(-127); // Reverses inatke
-                pros::delay(150); // Delay for 300 ms
-                IntakeSecond.move(127); 
-                
-              }
-              else{
-              Intakefirst.move(127);
-              IntakeSecond.move(127);
-              }
+      if (AUTON == false){
+        int hue = OP.get_hue();
+        // Check if the hue corresponds to red (typical red hue is around 0-30 degrees)
+        if (hue > 65) {
+          Ring_Detected = true;
+          while (Ring_Detected == true) {
+           // Reverses intake for a bit
+           if(Distance_S1.get_distance() < 100){
+            pros::delay(80);
+            IntakeSecond.move(-127); // Reverses inatke
+            pros::delay(150); // Delay for 300 ms
+            Ring_Detected = false;
+
+           }
+           else{
+            Intakefirst.move(127);
+            IntakeSecond.move(127);
+           }
+          }
+        } 
+        else{
+          Intakefirst.move(127);
+          IntakeSecond.move(127);
+        }
             }
-            if (AUTON == true){
+        while (AUTON == true){
               int hue = OP.get_hue();
-              if (hue > 55) {
-                // Reverses intake for a bit
-                pros::delay(180); // Delays for 120 ms
-                IntakeSecond.move(-127); // Reverses inatke
-                pros::delay(150); // Delay for 300 ms
-                
-              }              
-              else{
-               Intakefirst.move(127);
-               IntakeSecond.move(127);
-               pros::delay(50);
-               if (IntakeSecond.get_actual_velocity() == 0) {
-                IntakeSecond.move(-127);
-                pros::delay(250);
-                // Resume normal intake operation
-                IntakeSecond.move(127);
-               }
-              }
+          if (hue > 65) {
+           Ring_Detected = true;
+          while (Ring_Detected == true) {
+           // Reverses intake for a bit
+           if(Distance_S1.get_distance() < 100){
+            pros::delay(100);
+            IntakeSecond.move(-127); // Reverses inatke
+            pros::delay(150); // Delay for 300 ms
+            Ring_Detected = false;
+
+           }
+           else{
+            Intakefirst.move(127);
+            IntakeSecond.move(127);
+           }
+          }
+        }              
+          else{
+           Intakefirst.move(127);
+           IntakeSecond.move(127);
+           pros::delay(50);
+           if (IntakeSecond.get_actual_velocity() == 0) {
+           IntakeSecond.move(-127);
+           pros::delay(250);
+           // Resume normal intake operation
+           IntakeSecond.move(127);
+          }
+          }
             }
     }
     else if (Test ==2){
@@ -621,6 +659,7 @@ void RedColorSensor_Task(){
 // This function runs in an infinite loop, checking for red and blue hues and activating or deactivating the sorter based on the detected color.
 void BlueColorSensor_task(){
    
+  bool Ring_Detected = false;
   while (true) {
 
     if (Test == 1){
@@ -628,27 +667,46 @@ void BlueColorSensor_task(){
       if (AUTON == false){
         int hue = OP.get_hue();
         // Check if the hue corresponds to red (typical red hue is around 0-30 degrees)
-        if (hue < 30) {
-          // Reverses intake for a bit
-          pros::delay(180); // Delays for 120 ms
-          IntakeSecond.move(-127); // Reverses inatke
-          pros::delay(150); // Delay for 300 ms
-          IntakeSecond.move(127); 
-          
-        }
+        if (hue < 35) {
+          Ring_Detected = true;
+          while (Ring_Detected == true) {
+           // Reverses intake for a bit
+           if(Distance_S1.get_distance() < 100){
+            pros::delay(80);
+            IntakeSecond.move(-127); // Reverses inatke
+            pros::delay(150); // Delay for 300 ms
+            Ring_Detected = false;
+
+           }
+           else{
+            Intakefirst.move(127);
+            IntakeSecond.move(127);
+           }
+          }
+        } 
         else{
-        Intakefirst.move(127);
-        IntakeSecond.move(127);
+          Intakefirst.move(127);
+          IntakeSecond.move(127);
         }
       }
-      if (AUTON == true){
+      while (AUTON == true){
         int hue = OP.get_hue();
         if (hue < 30) {
-          // Reverses intake for a bit
-          pros::delay(180); // Delays for 120 ms
-          IntakeSecond.move(-127); // Reverses inatke
-          pros::delay(150); // Delay for 300 ms
-          
+          Ring_Detected = true;
+          while (Ring_Detected == true) {
+           // Reverses intake for a bit
+           if(Distance_S1.get_distance() < 100){
+            pros::delay(80);
+            IntakeSecond.move(-127); // Reverses inatke
+            pros::delay(150); // Delay for 300 ms
+            Ring_Detected = false;
+
+           }
+           else{
+            Intakefirst.move(127);
+            IntakeSecond.move(127);
+           }
+          }
         }              
         else{
          Intakefirst.move(127);

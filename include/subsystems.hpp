@@ -33,7 +33,7 @@ inline pros::adi::DigitalOut RightDoinker('E',false);
 // Sensors
 
 inline pros::IMU gyro(12);
-inline pros::Optical OP(3);
+inline pros::Optical OP(6);
 inline pros::adi::DigitalIn LimitSwitch1 ('G');
 inline pros::adi::DigitalIn LimitSwitch2 ('B');
 inline pros::ADIAnalogIn LineTrack('A');

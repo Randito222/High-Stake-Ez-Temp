@@ -39,6 +39,7 @@ extern void SigAutoBP();
 extern void ElimBluePos();
 extern void ElimBlueNeg();
 extern void ElimRedNeg();
+extern void ElimRedPos();
 extern void DistruptionAuto();
 extern void GoalRush();
 extern void Skills();

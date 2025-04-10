@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "REDD",
+    "project_name": "RED",
     "target": "v5",
     "templates": {
       "EZ-Template": {
@@ -426,7 +426,7 @@
     "upload_options": {
       "description": "RED MODE",
       "after": "run",
-      "icon": "X",
+      "icon": "alien",
       "slot": 1
     },
     "use_early_access": false
